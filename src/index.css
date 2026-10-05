@@ -8,34 +8,26 @@
   }
 
   body {
-    background-color: #07090E;
-    color: #E2E8F0;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #0B1119;
+    color: #E9EEF2;
+    font-family: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Force tabular numbers on all monospace elements */
   .font-mono, [data-telemetry] {
     font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-feature-settings: 'tnum' on, 'zero' on;
   }
 }
 
-/* Aerospace Technical Grid - Refined & Subtle */
 .bg-tech-grid {
-  background-size: 48px 48px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(101, 133, 153, 0.08), transparent 65%);
 }
 
 .bg-tech-grid-dense {
-  background-size: 24px 24px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-color: rgba(255, 255, 255, 0.015);
 }
 
 /* Custom technical scrollbar */
@@ -44,14 +36,21 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #07090E;
+  background: #0B1119;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
+  background: #293D4D;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #3D5669;
+}
+
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible { outline: 2px solid #9FC7DA; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
 /* Restrained Animations */

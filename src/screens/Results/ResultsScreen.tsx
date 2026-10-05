@@ -57,21 +57,21 @@ export const ResultsScreen: React.FC = () => {
   }[scoreBreakdown.classification];
 
   return (
-    <div className="max-w-[1520px] mx-auto w-full p-4 sm:p-6 space-y-6 font-sans select-none">
+    <div className="max-w-[1520px] mx-auto w-full p-5 sm:p-8 space-y-6 font-sans">
       
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.08] gap-2">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 font-mono font-semibold">
-              FLIGHT DEBRIEF // ACT 07
+              06 / Results
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-sans font-medium">
-              MISSION EXECUTION ARCHIVE
+            <span className="text-xs text-slate-400 font-sans">
+              Project Aurora flight debrief
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white uppercase font-sans">
-            MISSION COMPLETE // PROJECT AURORA
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white font-sans">
+            Mission results
           </h1>
         </div>
 
@@ -82,7 +82,7 @@ export const ResultsScreen: React.FC = () => {
             icon={<RotateCcw className="w-3.5 h-3.5" />}
             onClick={resetMission}
           >
-            REPLAY MISSION
+            Replay mission
           </Button>
 
           <Button
@@ -91,7 +91,7 @@ export const ResultsScreen: React.FC = () => {
             icon={<Split className="w-4 h-4" />}
             onClick={() => setPhase('what_if')}
           >
-            WHAT-IF ANALYSIS
+            What-if analysis
           </Button>
         </div>
       </div>

@@ -177,21 +177,21 @@ export const SimulationScreen: React.FC = () => {
   const simulatedVelocity = Number((18.4 + Math.sin(progressPct * 0.05) * 2.1).toFixed(1));
 
   return (
-    <div className="max-w-[1720px] mx-auto w-full p-4 space-y-4 font-sans select-none">
+    <div className="max-w-[1720px] mx-auto w-full p-5 sm:p-8 space-y-6 font-sans">
       
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/[0.08] gap-2">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] bg-sky-950 text-sky-400 px-2 py-0.5 rounded border border-sky-500/30 font-mono font-semibold">
-              SIM-05
+              05 / Simulation
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-sans font-medium">
-              ACTIVE INTERPLANETARY TRAJECTORY SIMULATION
+            <span className="text-xs text-slate-400 font-sans">
+              Interplanetary mission in progress
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase font-sans">
-            HELIOCENTRIC CRUISE & FLIGHT EXECUTION
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white font-sans">
+            Flight simulation
           </h1>
         </div>
 

@@ -8,33 +8,33 @@ export default {
     extend: {
       colors: {
         space: {
-          950: '#04060A',
-          900: '#070A0F',
-          850: '#0B1017',
-          800: '#0F1622',
-          750: '#141D2B',
-          700: '#1A2536',
-          650: '#212E42',
-          600: '#2A3A52',
-          border: 'rgba(255, 255, 255, 0.08)',
-          borderSubtle: 'rgba(255, 255, 255, 0.05)',
-          borderActive: 'rgba(56, 189, 248, 0.4)',
+          950: '#0B1119',
+          900: '#101923',
+          850: '#15212D',
+          800: '#1A2835',
+          750: '#203140',
+          700: '#293D4D',
+          650: '#334A5D',
+          600: '#3D5669',
+          border: 'rgba(181, 200, 216, 0.16)',
+          borderSubtle: 'rgba(181, 200, 216, 0.10)',
+          borderActive: 'rgba(122, 172, 204, 0.55)',
         },
         telemetry: {
-          cyan: '#00D2FF',
-          blue: '#38BDF8',
+          cyan: '#8EB8D2',
+          blue: '#7AA8C6',
           amber: '#F59E0B',
           red: '#EF4444',
           green: '#10B981',
-          text: '#F1F5F9',
-          muted: '#94A3B8',
-          dim: '#64748B',
+          text: '#E9EEF2',
+          muted: '#A4B2BF',
+          dim: '#7F91A1',
         }
       },
       fontFamily: {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
-        display: ['"Space Grotesk"', 'Inter', 'sans-serif']
+        display: ['Inter Variable', 'Inter', 'sans-serif']
       },
       letterSpacing: {
         widestTechnical: '0.14em',

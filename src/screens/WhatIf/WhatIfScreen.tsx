@@ -27,21 +27,21 @@ export const WhatIfScreen: React.FC = () => {
   const altScore = activeScenario?.scoreBreakdown.finalScore ?? 80;
 
   return (
-    <div className="max-w-[1520px] mx-auto w-full p-4 sm:p-6 space-y-6 font-sans select-none">
+    <div className="max-w-[1520px] mx-auto w-full p-5 sm:p-8 space-y-6 font-sans">
       
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.08] gap-3">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
             <span className="text-[10px] font-mono font-medium bg-sky-500/10 text-sky-400 px-2 py-0.5 border border-sky-500/20 rounded">
-              ANALYSIS ACT 08
+              07 / Compare
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wide">
-              Counterfactual Mission Trade-Off Engine
+            <span className="text-xs text-slate-400">
+              Compare alternate mission choices
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100 uppercase">
-            WHAT IF? // ARCHITECTURAL COMPARISON
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-100">
+            What if you chose differently?
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
             "Every mission has another possible path. Different priorities create different missions."
@@ -55,7 +55,7 @@ export const WhatIfScreen: React.FC = () => {
             icon={<ArrowRight className="w-3.5 h-3.5" />}
             onClick={() => setPhase('results')}
           >
-            BACK TO RESULTS
+            Back to results
           </Button>
 
           <Button
@@ -64,7 +64,7 @@ export const WhatIfScreen: React.FC = () => {
             icon={<RotateCcw className="w-3.5 h-3.5" />}
             onClick={resetMission}
           >
-            START NEW MISSION
+            Start new mission
           </Button>
         </div>
       </div>

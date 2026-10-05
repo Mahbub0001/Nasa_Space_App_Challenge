@@ -20,27 +20,27 @@ export const BriefingScreen: React.FC = () => {
   const { setPhase, config } = useMission();
 
   return (
-    <div className="max-w-[1520px] mx-auto w-full p-4 sm:p-6 space-y-5 font-sans select-none">
+    <div className="max-w-[1520px] mx-auto w-full p-5 sm:p-8 space-y-6 font-sans">
       
       {/* Top Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/[0.08] gap-3">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
             <span className="text-[10px] font-mono font-medium bg-sky-500/10 text-sky-400 px-2 py-0.5 border border-sky-500/20 rounded">
-              DIRECTIVE ACT 01
+              01 / Briefing
             </span>
-            <span className="text-xs text-slate-400 font-sans tracking-wide uppercase">
-              Deep-Space Exploration Directive
+            <span className="text-xs text-slate-400 font-sans">
+              Project Aurora
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-100 uppercase">
-            PROJECT AURORA // MISSION BRIEFING
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-100">
+            Mission briefing
           </h1>
         </div>
 
         <div className="flex items-center gap-3">
           <Badge variant="nominal">
-            LAUNCH WINDOW OPEN
+            Launch window open
           </Badge>
           <Button
             variant="primary"
@@ -48,7 +48,7 @@ export const BriefingScreen: React.FC = () => {
             icon={<ArrowRight className="w-3.5 h-3.5" />}
             onClick={() => setPhase('mission_control')}
           >
-            ENTER MISSION CONTROL
+            Design spacecraft
           </Button>
         </div>
       </div>

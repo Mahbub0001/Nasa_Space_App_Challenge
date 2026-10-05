@@ -1,197 +1,71 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
+import { ArrowRight, Box, ChartNoAxesCombined, Orbit, Play } from 'lucide-react';
 import { useMission } from '../../hooks/useMission';
 import { Button } from '../../components/common/Button';
-import { Rocket, Sparkles } from 'lucide-react';
 import { sound } from '../../utils/sound';
 
 export const LandingScreen: React.FC = () => {
   const { setPhase, applyDemoPreset } = useMission();
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    const onResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', onResize);
-
-    // Generate deterministic stars
-    const starCount = 140;
-    const stars = Array.from({ length: starCount }, (_, i) => ({
-      x: ((i * 73) % width),
-      y: ((i * 127) % height),
-      radius: (i % 3 === 0 ? 1.5 : 0.8),
-      alpha: 0.2 + ((i % 5) * 0.15),
-      speed: 0.05 + ((i % 4) * 0.03)
-    }));
-
-    let tick = 0;
-    const draw = () => {
-      tick++;
-      ctx.clearRect(0, 0, width, height);
-
-      // Deep space gradient
-      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-      bgGrad.addColorStop(0, '#030508');
-      bgGrad.addColorStop(0.5, '#05080D');
-      bgGrad.addColorStop(1, '#080E17');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, width, height);
-
-      // Subtle celestial orbital paths
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(width * 0.5, height * 1.1, height * 0.8, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.03)';
-      ctx.beginPath();
-      ctx.arc(width * 0.5, height * 1.1, height * 1.1, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Draw restrained stars with slow subtle drift
-      for (let i = 0; i < starCount; i++) {
-        const s = stars[i];
-        s.y -= s.speed;
-        if (s.y < 0) s.y = height;
-
-        const twinkle = Math.sin(tick * 0.02 + i) * 0.2;
-        ctx.fillStyle = `rgba(242, 245, 247, ${Math.max(0.1, s.alpha + twinkle)})`;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      animId = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', onResize);
-    };
-  }, []);
-
-  const handleStart = () => {
+  const start = () => {
     sound.playClick();
     setPhase('briefing');
   };
 
-  const handleQuickDemo = () => {
+  const quickDemo = () => {
     applyDemoPreset();
     setPhase('mission_control');
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 overflow-hidden select-none">
-      {/* Background Starfield Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none"
-      />
-
-      {/* Subtle Aerospace Silhouette & Orbit Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-        <svg viewBox="0 0 800 800" className="w-[800px] h-[800px]">
-          <circle cx="400" cy="400" r="320" stroke="#38BDF8" strokeWidth="0.8" strokeDasharray="6 6" fill="none" />
-          <circle cx="400" cy="400" r="240" stroke="#38BDF8" strokeWidth="0.8" fill="none" opacity="0.4" />
-          <line x1="80" y1="400" x2="720" y2="400" stroke="#38BDF8" strokeWidth="0.5" opacity="0.3" />
-          <line x1="400" y1="80" x2="400" y2="720" stroke="#38BDF8" strokeWidth="0.5" opacity="0.3" />
-        </svg>
-      </div>
-
-      {/* Main Hero Container */}
-      <div className="relative z-10 max-w-4xl w-full text-center py-12 px-6 flex flex-col items-center">
-        
-        {/* Aerospace Mission Identifier Tag */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/20 text-sky-300 font-mono text-[11px] uppercase tracking-wider mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
-          <span>NASA SPACE APPS 2026 // FLIGHT CANDIDATE DEMO</span>
-        </div>
-
-        {/* Primary Title */}
-        <h1 className="font-sans text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-slate-100 mb-3">
-          MISSION FORGE
-        </h1>
-
-        {/* Sub-Header */}
-        <p className="font-sans text-xs sm:text-sm text-sky-400 font-semibold tracking-[0.25em] uppercase mb-4">
-          DESIGN. DECIDE. EXPLORE.
-        </p>
-
-        {/* Tagline & Supporting Copy */}
-        <div className="max-w-xl mx-auto space-y-2 mb-10">
-          <blockquote className="font-sans italic text-lg sm:text-xl text-slate-200 font-normal">
-            "Every mission is a trade-off."
-          </blockquote>
-          <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
-            Build a deep-space scientific spacecraft. Allocate mass, electrical power, and lifecycle budget under strict constraints. 
-            Balance operational risk against planetary science return, then test whether your mission survives deep-space reality.
-          </p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-          <Button
-            variant="primary"
-            size="lg"
-            icon={<Rocket className="w-4 h-4 text-space-950" />}
-            onClick={handleStart}
-            className="w-full sm:w-auto px-8 py-3 text-sm shadow-lg shadow-sky-500/10"
-          >
-            START MISSION
-          </Button>
-
-          <Button
-            variant="secondary"
-            size="lg"
-            icon={<Sparkles className="w-4 h-4 text-sky-400" />}
-            onClick={handleQuickDemo}
-            className="w-full sm:w-auto px-6 py-3 text-sm"
-          >
-            QUICK DEMO SETUP
-          </Button>
-        </div>
-
-        {/* Technical Architecture Footnote */}
-        <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-3xl pt-8 border-t border-white/[0.08] text-left">
-          <div className="p-3 bg-white/[0.02] border border-white/[0.06] rounded-md transition-colors hover:border-white/[0.12]">
-            <span className="text-[10px] text-sky-400 font-mono font-semibold block">01 // CONSTRAINTS</span>
-            <span className="text-xs text-slate-200 font-sans font-semibold block mt-1">MASS & POWER</span>
-            <span className="text-[11px] text-slate-400 font-sans block mt-0.5">Strict launch throw-weight</span>
+    <div className="relative flex-1 overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_78%_40%,rgba(81,121,150,0.18),transparent_44%)]" />
+      <div className="relative max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 pt-16 pb-20 lg:pt-24">
+        <div className="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(380px,0.9fr)] gap-14 lg:gap-20 items-center min-h-[540px]">
+          <div>
+            <div className="inline-flex items-center gap-2 text-xs font-medium text-slate-400 mb-8">
+              <span className="w-1.5 h-1.5 rounded-full bg-sky-300" />
+              Space Apps Challenge 2026 <span className="text-slate-600">/</span> Mission design game
+            </div>
+            <h1 className="max-w-[700px] text-[clamp(3.4rem,7vw,6.3rem)] leading-[0.98] font-semibold tracking-[-0.065em] text-[#EEF3F5]">
+              Make the mission <span className="text-[#94B6CB]">work.</span>
+            </h1>
+            <p className="mt-8 max-w-[570px] text-lg leading-relaxed text-slate-400">
+              Design a spacecraft, balance its limits, and see how your engineering decisions shape the journey to Mars.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Button size="lg" onClick={start} icon={<ArrowRight className="w-4 h-4" />}>Start designing</Button>
+              <Button size="lg" variant="outline" onClick={quickDemo} icon={<Play className="w-4 h-4" />}>Explore demo</Button>
+            </div>
+            <p className="mt-5 text-xs text-slate-500">An interactive educational prototype. No aerospace experience required.</p>
           </div>
 
-          <div className="p-3 bg-white/[0.02] border border-white/[0.06] rounded-md transition-colors hover:border-white/[0.12]">
-            <span className="text-[10px] text-sky-400 font-mono font-semibold block">02 // SUBSYSTEMS</span>
-            <span className="text-xs text-slate-200 font-sans font-semibold block mt-1">MODULAR BUS</span>
-            <span className="text-[11px] text-slate-400 font-sans block mt-0.5">Custom CAD & 3D visual</span>
-          </div>
-
-          <div className="p-3 bg-white/[0.02] border border-white/[0.06] rounded-md transition-colors hover:border-white/[0.12]">
-            <span className="text-[10px] text-sky-400 font-mono font-semibold block">03 // SIMULATION</span>
-            <span className="text-xs text-slate-200 font-sans font-semibold block mt-1">ORBITAL CORRIDOR</span>
-            <span className="text-[11px] text-slate-400 font-sans block mt-0.5">In-flight anomaly room</span>
-          </div>
-
-          <div className="p-3 bg-white/[0.02] border border-white/[0.06] rounded-md transition-colors hover:border-white/[0.12]">
-            <span className="text-[10px] text-sky-400 font-mono font-semibold block">04 // OUTCOME</span>
-            <span className="text-xs text-slate-200 font-sans font-semibold block mt-1">WHAT-IF ANALYSIS</span>
-            <span className="text-[11px] text-slate-400 font-sans block mt-0.5">Comparative debrief</span>
+          <div className="relative max-w-[500px] w-full mx-auto lg:mr-0">
+            <div className="absolute -inset-8 rounded-full border border-white/[0.05]" />
+            <div className="relative rounded-[22px] border border-space-border bg-[#14212D]/95 shadow-[0_28px_80px_rgba(0,0,0,0.25)] overflow-hidden">
+              <div className="px-6 py-5 flex items-center justify-between border-b border-space-border">
+                <div>
+                  <div className="text-xs text-slate-500 mb-1">Mission dossier</div>
+                  <div className="text-lg font-semibold tracking-tight text-slate-100">Aurora / Mars orbiter</div>
+                </div>
+                <span className="font-mono text-[10px] text-slate-400 border border-space-border rounded-md px-2 py-1">CONCEPT 01</span>
+              </div>
+              <div className="relative h-[245px] flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_center,rgba(83,133,164,0.16),transparent_58%)]">
+                <div className="absolute w-[300px] h-[300px] border border-[#729AB4]/20 rounded-full rotate-[-22deg] scale-y-[0.44]" />
+                <div className="absolute w-[390px] h-[390px] border border-[#729AB4]/10 rounded-full rotate-[-22deg] scale-y-[0.44]" />
+                <div className="w-[125px] h-[125px] rounded-full bg-[radial-gradient(circle_at_34%_30%,#B97859,#793F36_60%,#2C2935)] shadow-[inset_-20px_-20px_35px_rgba(0,0,0,0.35),0_0_65px_rgba(154,90,70,0.08)]" />
+                <div className="absolute top-12 right-16 w-2 h-2 rounded-full bg-[#D8E3E8] shadow-[0_0_15px_#D8E3E8]" />
+                <span className="absolute bottom-5 left-6 text-[11px] font-mono text-slate-500">EARTH → MARS</span>
+                <span className="absolute bottom-5 right-6 text-[11px] font-mono text-slate-500">ORBITAL MISSION</span>
+              </div>
+              <div className="grid grid-cols-3 border-t border-space-border divide-x divide-space-border">
+                <div className="p-4"><Box className="w-4 h-4 text-[#9AB9CA] mb-2" /><div className="text-sm font-medium text-slate-200">Configure</div><div className="text-[11px] text-slate-500 mt-1">Spacecraft systems</div></div>
+                <div className="p-4"><ChartNoAxesCombined className="w-4 h-4 text-[#9AB9CA] mb-2" /><div className="text-sm font-medium text-slate-200">Balance</div><div className="text-[11px] text-slate-500 mt-1">Mass, power, budget</div></div>
+                <div className="p-4"><Orbit className="w-4 h-4 text-[#9AB9CA] mb-2" /><div className="text-sm font-medium text-slate-200">Simulate</div><div className="text-[11px] text-slate-500 mt-1">Decisions & outcomes</div></div>
+              </div>
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const { notification, dismissNotification } = useMission();
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-space-950 text-telemetry-text bg-tech-grid selection:bg-cyan-500/20 selection:text-cyan-200">
+    <div className="relative min-h-screen flex flex-col bg-space-950 text-telemetry-text bg-tech-grid selection:bg-sky-300/20 selection:text-sky-100">
       <Header />
 
       {/* Floating Notification Toast */}
@@ -33,7 +33,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               )}
             </div>
             <div className="flex-1 min-w-0 font-sans">
-              <h4 className="text-xs font-semibold uppercase tracking-wide">{notification.title}</h4>
+              <h4 className="text-sm font-semibold">{notification.title}</h4>
               <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">{notification.message}</p>
             </div>
             <button

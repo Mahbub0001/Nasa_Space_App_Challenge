@@ -12,21 +12,21 @@ export const ReadinessScreen: React.FC = () => {
   const { config, resources, audit, setPhase } = useMission();
 
   return (
-    <div className="max-w-[1720px] mx-auto w-full p-4 space-y-4 font-sans">
+    <div className="max-w-[1720px] mx-auto w-full p-5 sm:p-8 space-y-6 font-sans">
       
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/[0.08] gap-2">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] bg-sky-950 text-sky-400 px-2 py-0.5 rounded border border-sky-500/30 font-mono font-semibold">
-              GO-04
+              04 / Readiness
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-sans font-medium">
-              MISSION READINESS // PRE-LAUNCH SAFETY-OF-FLIGHT REVIEW
+            <span className="text-xs text-slate-400 font-sans">
+              Review constraints before launch
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase font-sans">
-            PRE-LAUNCH READINESS AUDIT
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white font-sans">
+            Mission readiness
           </h1>
         </div>
 
@@ -37,7 +37,7 @@ export const ReadinessScreen: React.FC = () => {
             icon={<ArrowLeft className="w-3.5 h-3.5" />}
             onClick={() => setPhase('payload')}
           >
-            MODIFY PAYLOAD
+            Modify payload
           </Button>
 
           <Button
@@ -47,7 +47,7 @@ export const ReadinessScreen: React.FC = () => {
             icon={<Rocket className="w-3.5 h-3.5" />}
             onClick={() => setPhase('launch')}
           >
-            INITIATE LAUNCH
+            Launch mission
           </Button>
         </div>
       </div>
