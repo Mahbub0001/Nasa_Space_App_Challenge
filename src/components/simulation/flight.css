@@ -19,9 +19,30 @@
 .flight-scene__canvas{position:absolute;inset:0;cursor:grab}.flight-scene__canvas:active{cursor:grabbing}.flight-scene__canvas canvas{display:block;width:100%;height:100%}
 .flight-scene__vignette{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(6,17,30,.68),transparent 24%,transparent 72%,rgba(4,13,23,.82))}
 .flight-scene__label{position:absolute;left:18px;right:18px;display:flex;align-items:center;justify-content:space-between;gap:10px;font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#c7dbe8;pointer-events:none}
-.flight-scene__label--top{top:18px}.flight-scene__label--bottom{bottom:18px;color:#92aabd}.flight-scene__live{width:7px;height:7px;border-radius:50%;background:#73d9bc;box-shadow:0 0 14px #73d9bc;margin-right:6px;animation:flight-live 2s infinite}
-.flight-scene__actions{position:absolute;left:18px;bottom:48px;display:flex;gap:7px}.flight-scene__actions button{padding:7px 9px;border:1px solid #49677a;border-radius:6px;background:#112637cc;color:#c8dfea;font:600 9px 'IBM Plex Mono',monospace;letter-spacing:.07em;backdrop-filter:blur(6px)}.flight-scene__actions button:hover{border-color:#9dcfe0;background:#204054}
-.flight-scene__inspect{position:absolute;left:18px;top:54px;max-width:260px;padding:13px 17px;border:1px solid #51738a;border-radius:10px;background:rgba(10,26,40,.94);box-shadow:0 15px 40px #0007}.flight-scene__inspect strong{display:block;font-size:13px}.flight-scene__inspect p{font-size:11px;color:#aec5d2;margin-top:5px;line-height:1.5}.flight-scene__inspect button{position:absolute;right:5px;top:5px;padding:2px 7px}
+.flight-scene__label--top{top:18px;z-index:2}
+.flight-scene__brand{display:flex;align-items:center;gap:6px}
+.flight-scene__transfer-pct{margin-left:8px;padding:2px 6px;border-radius:4px;background:#183245;color:#88c7e0;font-size:9px}
+.flight-scene__cams{display:flex;gap:5px;pointer-events:auto}
+.flight-scene__cams button{padding:4px 8px;border:1px solid rgba(137,185,206,.25);border-radius:5px;background:#0a1a28cc;color:#a0c4d8;font:600 9px 'IBM Plex Mono',monospace;letter-spacing:.05em;cursor:pointer;transition:all .18s;backdrop-filter:blur(6px)}
+.flight-scene__cams button:hover{background:#163148;border-color:#73b9d7;color:#fff}
+.flight-scene__cams button.is-active{background:#235270;border-color:#83d0f5;color:#e8f7ff;box-shadow:0 0 10px rgba(131,208,245,.35)}
+.flight-scene__telemetry{position:absolute;right:18px;top:52px;display:flex;flex-direction:column;gap:5px;pointer-events:none;font-family:'IBM Plex Mono',monospace;text-align:right;z-index:2}
+.flight-scene__telemetry-item{background:rgba(8,21,34,.75);border:1px solid rgba(75,115,142,.35);border-radius:6px;padding:4px 8px;backdrop-filter:blur(6px)}
+.flight-scene__telemetry-item span{display:block;font-size:8px;color:#7aa2b8;letter-spacing:.1em;text-transform:uppercase}
+.flight-scene__telemetry-item strong{display:block;font-size:11px;color:#def0fa;font-weight:650}
+.flight-scene__status-badge{display:inline-flex;align-items:center;padding:3px 6px;border-radius:4px;font-size:8.5px;font-weight:700;letter-spacing:.08em}
+.flight-scene__status-badge--nominal{background:rgba(52,211,153,.16);border:1px solid #34d399;color:#6ee7b7}
+.flight-scene__status-badge--warning{background:rgba(251,191,36,.16);border:1px solid #fbbf24;color:#fcd34d}
+.flight-scene__status-badge--danger{background:rgba(248,113,113,.16);border:1px solid #f87171;color:#fca5a5}
+.flight-scene__label--bottom{bottom:18px;color:#92aabd}
+.flight-scene__live{width:7px;height:7px;border-radius:50%;background:#73d9bc;box-shadow:0 0 14px #73d9bc;margin-right:6px;animation:flight-live 2s infinite}
+.flight-scene__actions{position:absolute;left:18px;bottom:48px;display:flex;gap:7px}
+.flight-scene__actions button{padding:7px 9px;border:1px solid #49677a;border-radius:6px;background:#112637cc;color:#c8dfea;font:600 9px 'IBM Plex Mono',monospace;letter-spacing:.07em;backdrop-filter:blur(6px)}
+.flight-scene__actions button:hover{border-color:#9dcfe0;background:#204054}
+.flight-scene__inspect{position:absolute;left:18px;top:54px;max-width:260px;padding:13px 17px;border:1px solid #51738a;border-radius:10px;background:rgba(10,26,40,.94);box-shadow:0 15px 40px #0007}
+.flight-scene__inspect strong{display:block;font-size:13px}
+.flight-scene__inspect p{font-size:11px;color:#aec5d2;margin-top:5px;line-height:1.5}
+.flight-scene__inspect button{position:absolute;right:5px;top:5px;padding:2px 7px}
 .flight-scene__fallback{position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center;background:#081826;color:#d2e3ed;font-size:13px}
 .flight-game__mission{padding:22px;border:1px solid #30475a;border-radius:15px;background:linear-gradient(155deg,#132839,#0b1826);box-shadow:0 16px 48px #0003}
 .flight-game__mission>span{font:600 10px 'IBM Plex Mono',monospace;color:#79bad8;letter-spacing:.15em}.flight-game__mission h2{font-size:23px;letter-spacing:-.035em;margin:9px 0}.flight-game__mission p{color:#abc0cf;font-size:12px;line-height:1.65}.flight-game__mission dl{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.flight-game__mission dl div{padding:11px;background:#0c1b29;border:1px solid #263d4d;border-radius:8px}.flight-game__mission dt{font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#8eabbc}.flight-game__mission dd{margin:5px 0 0;font:650 18px 'IBM Plex Mono',monospace;color:#ecf4f7}.flight-game__mission ul{margin-top:10px;padding-left:17px;color:#b6c9d5;font-size:11px;line-height:1.8}.flight-game__mission li::marker{color:#77c3df}

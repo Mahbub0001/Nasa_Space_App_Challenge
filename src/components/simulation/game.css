@@ -43,3 +43,15 @@
 @keyframes rocket-flame{to{transform:scaleY(.62);opacity:.7}}
 @media(prefers-reduced-motion:reduce){.launch-scene *{animation:none!important;transition:none!important}}
 
+
+/* Crew moods */
+.guide-head{transform-origin:90px 110px;transition:transform .4s}
+.guide-brows,.guide-portrait path{transition:d .35s ease}
+.guide-portrait--worried .guide-head{animation:guide-worry 1.6s ease-in-out infinite}
+.guide-portrait--focused .guide-head{transform:translateY(1px) rotate(-1.5deg)}
+.guide-portrait--relieved .guide-head{animation:guide-nod 1.8s ease-in-out 2}
+.guide-portrait--worried{border-color:rgba(240,150,120,.45)}
+.guide-portrait--relieved{border-color:rgba(120,220,180,.45)}
+@keyframes guide-worry{0%,100%{transform:rotate(0)}30%{transform:rotate(-2.5deg) translateX(-1px)}60%{transform:rotate(2deg) translateX(1px)}}
+@keyframes guide-nod{30%{transform:translateY(3px) rotate(2deg)}60%{transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.guide-head{animation:none!important}}

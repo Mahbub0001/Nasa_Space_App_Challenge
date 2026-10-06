@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test:spacecraft": "node --test tests/spacecraft-model.test.mjs",
-    "test:game": "node --test tests/mission-game.test.mjs tests/flight-game.test.mjs"
+    "test:game": "node --test tests/mission-game.test.mjs tests/flight-game.test.mjs tests/mission-phases.test.mjs tests/landing-game.test.mjs tests/discovery-game.test.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",

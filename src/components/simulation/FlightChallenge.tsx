@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, ArrowRight, Check, Radio, Zap } from 'lucide-react';
 import type { MissionConfiguration } from '../../types/mission';
 import type { ResourceState } from '../../types/simulation';
 import { CHARACTERS } from '../../data/characters';
-import { AnimatedGuide } from '../narrative/AnimatedGuide';
+import { AnimatedGuide, type GuideMood } from '../narrative/AnimatedGuide';
 import { availablePackets, downlinkCapacity, evaluateDownlink, evaluatePower, evaluateTrajectory, stormCapacity, type FlightChallengeId, type FlightPacketId, type FlightResolution } from '../../simulation/flightGame';
+import { sound } from '../../utils/sound';
 import './flight.css';
 
 interface FlightChallengeProps {
@@ -32,7 +33,25 @@ export const FlightChallenge: React.FC<FlightChallengeProps> = ({ id, config, re
   const downlink = useMemo(() => evaluateDownlink(config, selectedPackets), [config, selectedPackets]);
   const prediction = id === 'trajectory' ? trajectory : id === 'power' ? power : downlink;
   const packets = availablePackets(config);
-  const togglePacket = (packet: FlightPacketId) => setSelectedPackets(previous => previous.includes(packet) ? previous.filter(id => id !== packet) : [...previous, packet]);
+
+  const guideMood: GuideMood =
+    prediction.quality === 'excellent'
+      ? 'relieved'
+      : prediction.quality === 'critical'
+      ? 'worried'
+      : 'focused';
+
+  useEffect(() => {
+    if (id === 'trajectory') {
+      onBurnChange?.(burn);
+    }
+  }, [id, burn, onBurnChange]);
+
+  const togglePacket = (packet: FlightPacketId) => {
+    sound.playClick();
+    setSelectedPackets(previous => (previous.includes(packet) ? previous.filter(id => id !== packet) : [...previous, packet]));
+  };
+
   const commit = () => {
     if (id === 'trajectory') onCommit(trajectory, `${burn} m/s course trim`, { trajectoryError: trajectory.error });
     if (id === 'power') onCommit(power, `Storm load: ${power.load}/${power.capacity} units`, {});
@@ -41,7 +60,7 @@ export const FlightChallenge: React.FC<FlightChallengeProps> = ({ id, config, re
 
   return <section className="flight-challenge" aria-label={situation.title}>
     <div className="flight-challenge__heading"><span>ENCOUNTER {situation.index} / 03</span><span className="flight-challenge__alert"><AlertTriangle size={13} /> ACTION REQUIRED</span></div>
-    <div className="flight-challenge__intro"><div><p className="flight-challenge__kicker">{situation.kicker}</p><h2>{situation.title}</h2></div><div className="flight-challenge__crew"><AnimatedGuide character={CHARACTERS[situation.character]} speaking compact /><p><strong>{CHARACTERS[situation.character].name}</strong><span>{situation.message}</span></p></div></div>
+    <div className="flight-challenge__intro"><div><p className="flight-challenge__kicker">{situation.kicker}</p><h2>{situation.title}</h2></div><div className="flight-challenge__crew"><AnimatedGuide character={CHARACTERS[situation.character]} speaking compact mood={guideMood} /><p><strong>{CHARACTERS[situation.character].name}</strong><span>{situation.message}</span></p></div></div>
 
     {id === 'trajectory' && <div className="flight-challenge__workbench">
       <div className="flight-challenge__diagram" aria-hidden="true"><div className="flight-challenge__target"><span>ARRIVAL CORRIDOR</span></div><div className="flight-challenge__aim" style={{ left: `${Math.min(90, Math.max(10, 50 + (burn - (config.destinationId === 'mars' ? 12 : config.destinationId === 'lunar_orbit' ? 9 : 16)) * 4))}%` }} /><div className="flight-challenge__targetline" /></div>
@@ -51,7 +70,7 @@ export const FlightChallenge: React.FC<FlightChallengeProps> = ({ id, config, re
 
     {id === 'power' && <div className="flight-challenge__workbench">
       <div className="flight-challenge__meter"><span>STORM CAPACITY <strong>{stormCapacity(config, resources)} U</strong></span><div><i style={{ width: `${Math.min(100, power.load / power.capacity * 100)}%`, background: power.load > power.capacity ? '#ef927f' : '#80cfb1' }} /></div><span>SELECTED LOAD <strong>{power.load} U</strong></span></div>
-      <div className="flight-challenge__systems"><div className="flight-challenge__system is-locked"><Zap size={16} /><div><strong>Avionics & thermal</strong><span>42 U · essential</span></div><Check size={16} /></div><button type="button" className={`flight-challenge__system ${scienceOn ? 'is-active' : ''}`} onClick={() => setScienceOn(!scienceOn)} aria-pressed={scienceOn}><Zap size={16} /><div><strong>Science instruments</strong><span>22 U · observations</span></div><span>{scienceOn ? 'ON' : 'OFF'}</span></button><button type="button" className={`flight-challenge__system ${relayOn ? 'is-active' : ''}`} onClick={() => setRelayOn(!relayOn)} aria-pressed={relayOn}><Radio size={16} /><div><strong>Continuous relay</strong><span>16 U · telemetry</span></div><span>{relayOn ? 'ON' : 'OFF'}</span></button></div>
+      <div className="flight-challenge__systems"><div className="flight-challenge__system is-locked"><Zap size={16} /><div><strong>Avionics & thermal</strong><span>42 U · essential</span></div><Check size={16} /></div><button type="button" className={`flight-challenge__system ${scienceOn ? 'is-active' : ''}`} onClick={() => { sound.playClick(); setScienceOn(!scienceOn); }} aria-pressed={scienceOn}><Zap size={16} /><div><strong>Science instruments</strong><span>22 U · observations</span></div><span>{scienceOn ? 'ON' : 'OFF'}</span></button><button type="button" className={`flight-challenge__system ${relayOn ? 'is-active' : ''}`} onClick={() => { sound.playClick(); setRelayOn(!relayOn); }} aria-pressed={relayOn}><Radio size={16} /><div><strong>Continuous relay</strong><span>16 U · telemetry</span></div><span>{relayOn ? 'ON' : 'OFF'}</span></button></div>
       <div className="flight-challenge__hint">Your {config.powerSystemId.replace(/_/g, ' ')} system sets this storm capacity. Running over capacity is allowed, but raises mission risk.</div>
     </div>}
 

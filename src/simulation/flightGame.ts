@@ -40,8 +40,12 @@ export function downlinkCapacity(config: MissionConfiguration) {
   return config.communicationId === 'deep_space' ? 9 : config.communicationId === 'high_gain' ? 7 : 5;
 }
 
+export function idealBurn(config: MissionConfiguration) {
+  return config.destinationId === 'lunar_orbit' ? 9 : config.destinationId === 'asteroid_belt' ? 16 : 12;
+}
+
 export function evaluateTrajectory(burn: number, config: MissionConfiguration): FlightResolution & { error: number } {
-  const ideal = config.destinationId === 'lunar_orbit' ? 9 : config.destinationId === 'asteroid_belt' ? 16 : 12;
+  const ideal = idealBurn(config);
   const error = Math.abs(burn - ideal);
   const fuelCost = Math.round(burn * (config.propulsionId === 'electric' ? .28 : config.propulsionId === 'hybrid' ? .43 : .56));
   const riskDelta = Math.round(error * 2.2 - (error <= 2 ? 7 : 0));

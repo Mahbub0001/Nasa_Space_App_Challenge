@@ -15,7 +15,8 @@ import {
   DollarSign, 
   Wifi, 
   Lightbulb,
-  Compass
+  Compass,
+  Sparkles
 } from 'lucide-react';
 
 export const ResultsScreen: React.FC = () => {
@@ -78,6 +79,15 @@ export const ResultsScreen: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            size="md"
+            icon={<Sparkles className="w-3.5 h-3.5 text-amber-300" />}
+            onClick={() => setPhase('discovery')}
+          >
+            Science discoveries
+          </Button>
+
           <Button
             variant="secondary"
             size="md"
@@ -411,6 +421,15 @@ export const ResultsScreen: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
+          <Button
+            variant="secondary"
+            size="md"
+            icon={<Sparkles className="w-3.5 h-3.5 text-amber-300" />}
+            onClick={() => setPhase('discovery')}
+          >
+            DISCOVERY LAB & CERTIFICATE
+          </Button>
+
           <Button
             variant="secondary"
             size="md"

@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Compass, 
   MapPin, 
   Flame, 
   CheckCircle2, 
-  AlertTriangle, 
   ArrowRight, 
-  Radio, 
-  Gauge, 
   Sparkles 
 } from 'lucide-react';
 import { useMission } from '../../hooks/useMission';
@@ -25,7 +21,7 @@ import { sound } from '../../utils/sound';
 import type { LandingSite } from '../../types/mission';
 
 export const ArrivalScreen: React.FC = () => {
-  const { config, setPhase, liveTelemetry, recordDecision } = useMission();
+  const { config, setPhase, resources, recordDecision } = useMission();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [entryAngle, setEntryAngle] = useState(
@@ -77,8 +73,8 @@ export const ArrivalScreen: React.FC = () => {
         consequenceSummary: `${previewInsertion.title} · ${previewInsertion.detail}`,
         timestamp: new Date().toISOString(),
         deltas: { fuel: previewInsertion.fuelDelta, risk: previewInsertion.riskDelta, science: 0, power: 0, data: 0 },
-        beforeState: { fuel: liveTelemetry.fuelPct, power: 85, risk: liveTelemetry.riskPct, science: liveTelemetry.scienceScore },
-        afterState: { fuel: Math.max(0, liveTelemetry.fuelPct + previewInsertion.fuelDelta), power: 85, risk: Math.min(100, liveTelemetry.riskPct + previewInsertion.riskDelta), science: liveTelemetry.scienceScore },
+        beforeState: { fuel: resources.fuelPct, power: 85, risk: resources.riskPct, science: resources.scienceScore },
+        afterState: { fuel: Math.max(0, resources.fuelPct + previewInsertion.fuelDelta), power: 85, risk: Math.min(100, resources.riskPct + previewInsertion.riskDelta), science: resources.scienceScore },
       });
       setTimeout(() => {
         setStep(2);
@@ -107,7 +103,7 @@ export const ArrivalScreen: React.FC = () => {
         if (next >= 100) {
           clearInterval(interval);
           setDescentActive(false);
-          const result = evaluateTouchdown(selectedSite, throttle, liveTelemetry.fuelPct);
+          const result = evaluateTouchdown(selectedSite, throttle, resources.fuelPct);
           setTouchdownResult(result);
           if (result.success) {
             sound.playTouchdownCheer();
@@ -124,8 +120,8 @@ export const ArrivalScreen: React.FC = () => {
             consequenceSummary: `${result.title} · ${result.detail}`,
             timestamp: new Date().toISOString(),
             deltas: { fuel: -result.fuelConsumedPct, risk: result.success ? -8 : 25, science: result.scienceYield, power: 0, data: 15 },
-            beforeState: { fuel: liveTelemetry.fuelPct, power: 85, risk: liveTelemetry.riskPct, science: liveTelemetry.scienceScore },
-            afterState: { fuel: Math.max(0, liveTelemetry.fuelPct - result.fuelConsumedPct), power: 85, risk: result.success ? 4 : 45, science: liveTelemetry.scienceScore + result.scienceYield },
+            beforeState: { fuel: resources.fuelPct, power: 85, risk: resources.riskPct, science: resources.scienceScore },
+            afterState: { fuel: Math.max(0, resources.fuelPct - result.fuelConsumedPct), power: 85, risk: result.success ? 4 : 45, science: resources.scienceScore + result.scienceYield },
           });
           return 100;
         }
@@ -133,7 +129,7 @@ export const ArrivalScreen: React.FC = () => {
       });
     }, 100);
     return () => clearInterval(interval);
-  }, [descentActive, selectedSite, throttle, liveTelemetry]);
+  }, [descentActive, selectedSite, throttle, resources, recordDecision]);
 
   return (
     <main className="max-w-[1540px] mx-auto px-4 sm:px-6 lg:px-8 py-6 text-slate-100">
@@ -193,8 +189,8 @@ export const ArrivalScreen: React.FC = () => {
           <div className="mt-3 p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400">
             <div className="flex items-center gap-4">
               <span>TARGET: <strong className="text-slate-200">{targetName.toUpperCase()}</strong></span>
-              <span>PROPELLANT: <strong className="text-slate-200">{liveTelemetry.fuelPct}%</strong></span>
-              <span>FLIGHT RISK: <strong className="text-slate-200">{liveTelemetry.riskPct}%</strong></span>
+              <span>PROPELLANT: <strong className="text-slate-200">{resources.fuelPct}%</strong></span>
+              <span>FLIGHT RISK: <strong className="text-slate-200">{resources.riskPct}%</strong></span>
             </div>
             <span className="text-[#73d9bc]">TELEMETRY NOMINAL</span>
           </div>
@@ -324,6 +320,13 @@ export const ArrivalScreen: React.FC = () => {
                   CHOOSE SITE
                 </span>
               </div>
+
+              {insertionResult && (
+                <div className="p-3 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-xs font-mono text-emerald-300 flex items-center justify-between">
+                  <span>{insertionResult.title}</span>
+                  <span className="text-white font-bold">{insertionResult.statusBadge}</span>
+                </div>
+              )}
 
               <div className="space-y-2.5">
                 {sites.map(site => {
