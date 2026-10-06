@@ -8,6 +8,8 @@ import { PayloadScreen } from './screens/Payload/PayloadScreen';
 import { ReadinessScreen } from './screens/Readiness/ReadinessScreen';
 import { LaunchScreen } from './screens/Launch/LaunchScreen';
 import { SimulationScreen } from './screens/Simulation/SimulationScreen';
+import { ArrivalScreen } from './screens/Arrival/ArrivalScreen';
+import { DiscoveryScreen } from './screens/Discovery/DiscoveryScreen';
 import { ResultsScreen } from './screens/Results/ResultsScreen';
 import { WhatIfScreen } from './screens/WhatIf/WhatIfScreen';
 
@@ -29,6 +31,10 @@ const ScreenRouter: React.FC = () => {
       return <LaunchScreen />;
     case 'simulation':
       return <SimulationScreen />;
+    case 'arrival':
+      return <ArrivalScreen />;
+    case 'discovery':
+      return <DiscoveryScreen />;
     case 'results':
       return <ResultsScreen />;
     case 'what_if':

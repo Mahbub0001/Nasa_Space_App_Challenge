@@ -7,6 +7,7 @@ export type MissionPhase =
   | 'launch'
   | 'simulation'
   | 'arrival'
+  | 'discovery'
   | 'results'
   | 'what_if';
 
@@ -120,3 +121,31 @@ export interface MissionBaselineConstraints {
   baseRiskPct: number;
   baseScienceValue: number;
 }
+
+export interface LandingSite {
+  id: string;
+  destinationId: DestinationId;
+  name: string;
+  tagline: string;
+  coordinates: string;
+  elevationKm: number;
+  scienceMultiplier: number;
+  hazardLevel: 'Low' | 'Medium' | 'High';
+  description: string;
+  terrainType: string;
+  scientificObjectives: string[];
+}
+
+export interface ScienceDiscovery {
+  id: string;
+  instrumentId: InstrumentId;
+  instrumentName: string;
+  title: string;
+  headline: string;
+  evidence: string;
+  scientificImpact: string;
+  unlockedAt: string;
+  rarity: 'Common' | 'Breakthrough' | 'Historic';
+  sciencePoints: number;
+}
+

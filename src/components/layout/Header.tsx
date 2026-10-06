@@ -41,16 +41,18 @@ export const Header: React.FC = () => {
     { phase: 'mission_control', label: 'Spacecraft', code: '02' },
     { phase: 'payload', label: 'Payload', code: '03' },
     { phase: 'readiness', label: 'Readiness', code: '04' },
-    { phase: 'simulation', label: 'Simulation', code: '05' },
-    { phase: 'results', label: 'Results', code: '06' }
+    { phase: 'simulation', label: 'Cruise', code: '05' },
+    { phase: 'arrival', label: 'Landing', code: '06' },
+    { phase: 'discovery', label: 'Discovery', code: '07' },
+    { phase: 'results', label: 'Debrief', code: '08' }
   ];
 
   const canNavigateTo = (targetPhase: MissionPhase): boolean => {
     if (phase === 'landing') return false;
     if (targetPhase === 'simulation' && missionResult) return false;
     if ((targetPhase === 'results' || targetPhase === 'what_if') && !missionResult) return false;
-    // Don't allow jumping into simulation or results if not launched yet
-    if ((targetPhase === 'simulation' || targetPhase === 'results' || targetPhase === 'what_if') && 
+    // Don't allow jumping into simulation or late phases if not launched yet
+    if ((targetPhase === 'simulation' || targetPhase === 'arrival' || targetPhase === 'discovery' || targetPhase === 'results' || targetPhase === 'what_if') && 
         (phase === 'briefing' || phase === 'mission_control' || phase === 'payload' || phase === 'readiness')) {
       return false;
     }
