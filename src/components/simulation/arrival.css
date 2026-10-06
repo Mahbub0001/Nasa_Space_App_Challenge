@@ -1,0 +1,191 @@
+.arrival-scene {
+  position: relative;
+  height: min(56vw, 560px);
+  min-height: 400px;
+  overflow: hidden;
+  border: 1px solid #304e68;
+  border-radius: 16px;
+  background: #030812;
+  box-shadow: 0 24px 65px rgba(0, 0, 0, 0.4);
+}
+
+.arrival-scene__canvas {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+}
+
+.arrival-scene__canvas:active {
+  cursor: grabbing;
+}
+
+.arrival-scene__canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.arrival-scene__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(3, 8, 18, 0.72) 0%,
+    transparent 22%,
+    transparent 74%,
+    rgba(2, 6, 14, 0.86) 100%
+  );
+}
+
+.arrival-scene__header {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font: 600 10px 'IBM Plex Mono', monospace;
+  letter-spacing: 0.12em;
+  color: #c7dbe8;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.arrival-scene__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arrival-scene__live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #73d9bc;
+  box-shadow: 0 0 12px #73d9bc;
+  animation: arrival-pulse 1.8s infinite;
+}
+
+.arrival-scene__badge {
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #142e42;
+  border: 1px solid #355874;
+  color: #8ed2ea;
+  font-size: 8.5px;
+}
+
+.arrival-scene__cams {
+  display: flex;
+  gap: 5px;
+  pointer-events: auto;
+}
+
+.arrival-scene__cams button {
+  padding: 4px 8px;
+  border: 1px solid rgba(137, 185, 206, 0.25);
+  border-radius: 5px;
+  background: rgba(10, 26, 40, 0.8);
+  color: #a0c4d8;
+  font: 600 9px 'IBM Plex Mono', monospace;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.18s;
+  backdrop-filter: blur(6px);
+}
+
+.arrival-scene__cams button:hover {
+  background: #163148;
+  border-color: #73b9d7;
+  color: #fff;
+}
+
+.arrival-scene__cams button.is-active {
+  background: #235270;
+  border-color: #83d0f5;
+  color: #e8f7ff;
+  box-shadow: 0 0 10px rgba(131, 208, 245, 0.35);
+}
+
+.arrival-scene__telemetry {
+  position: absolute;
+  right: 18px;
+  top: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: right;
+  z-index: 2;
+}
+
+.arrival-scene__telemetry-card {
+  background: rgba(8, 21, 34, 0.78);
+  border: 1px solid rgba(75, 115, 142, 0.35);
+  border-radius: 6px;
+  padding: 5px 9px;
+  backdrop-filter: blur(6px);
+}
+
+.arrival-scene__telemetry-card span {
+  display: block;
+  font-size: 8px;
+  color: #7aa2b8;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.arrival-scene__telemetry-card strong {
+  display: block;
+  font-size: 11px;
+  color: #def0fa;
+  font-weight: 650;
+  margin-top: 1px;
+}
+
+.arrival-scene__telemetry-status {
+  color: #73d9bc !important;
+}
+
+.arrival-scene__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  text-align: center;
+  background: #061422;
+  color: #cce0ec;
+  font-size: 13px;
+}
+
+@keyframes arrival-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+@media (max-width: 650px) {
+  .arrival-scene {
+    min-height: 330px;
+    height: 380px;
+  }
+  .arrival-scene__header {
+    font-size: 8px;
+    left: 10px;
+    right: 10px;
+  }
+  .arrival-scene__telemetry {
+    top: 48px;
+    right: 10px;
+  }
+}
