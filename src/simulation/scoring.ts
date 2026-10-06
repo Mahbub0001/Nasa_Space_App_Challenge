@@ -2,29 +2,37 @@ import { MissionConfiguration } from '../types/mission';
 import { ResourceState, ScoreBreakdown, ScoreClassification, MissionResult, ResolvedDecision, WhatIfScenario } from '../types/simulation';
 import { DESTINATIONS } from '../data/destinations';
 import { calculateAllResources } from './engine';
+import type { FlightOutcome } from './flightGame';
+
+export function applyDecisionHistory(resources: ResourceState, decisions: ResolvedDecision[]): ResourceState {
+  const final = decisions.reduce<ResourceState>((state, decision) => ({
+    ...state,
+    fuelPct: Math.min(100, Math.max(0, state.fuelPct + decision.deltas.fuel)),
+    riskPct: Math.min(100, Math.max(0, state.riskPct + decision.deltas.risk)),
+    scienceScore: Math.max(0, state.scienceScore + decision.deltas.science),
+    powerUnits: Math.max(0, state.powerUnits + (decision.deltas.power ?? 0)),
+    dataReturnScore: Math.min(100, Math.max(0, state.dataReturnScore + (decision.deltas.data ?? 0))),
+  }), resources);
+  return { ...final, powerMarginUnits: final.maxPowerUnits - final.powerUnits };
+}
+
+function classifyScore(score: number): ScoreClassification {
+  if (score >= 90) return 'EXCEPTIONAL MISSION';
+  if (score >= 75) return 'MISSION SUCCESS';
+  if (score >= 60) return 'PARTIAL SUCCESS';
+  if (score >= 40) return 'HIGH RISK';
+  return 'MISSION FAILURE';
+}
 
 export function calculateScoreBreakdown(
   resources: ResourceState,
   decisions: ResolvedDecision[]
 ): ScoreBreakdown {
-  // Apply decision modifiers if any accumulated
-  let finalScience = resources.scienceScore;
-  let finalRisk = resources.riskPct;
-  let finalFuel = resources.fuelPct;
-  let finalData = resources.dataReturnScore;
-
-  for (const dec of decisions) {
-    finalScience += dec.deltas.science;
-    finalRisk += dec.deltas.risk;
-    finalFuel += dec.deltas.fuel;
-    if (dec.deltas.data) finalData += dec.deltas.data;
-  }
-
-  // Bound variables
-  finalScience = Math.max(0, finalScience);
-  finalRisk = Math.min(100, Math.max(0, finalRisk));
-  finalFuel = Math.min(100, Math.max(0, finalFuel));
-  finalData = Math.min(100, Math.max(0, finalData));
+  const finalResources = applyDecisionHistory(resources, decisions);
+  const finalScience = finalResources.scienceScore;
+  const finalRisk = finalResources.riskPct;
+  const finalFuel = finalResources.fuelPct;
+  const finalData = finalResources.dataReturnScore;
 
   // 1. Scientific Return (30%)
   // Baseline is 40, excellent is 90+
@@ -37,7 +45,7 @@ export function calculateScoreBreakdown(
   // 3. Resource Efficiency (20%)
   // Evaluates fuel remaining + mass and power margin utilization without waste
   const massUtilization = Math.min(1, resources.massKg / resources.maxMassKg);
-  const powerUtilization = Math.min(1, resources.powerUnits / resources.maxPowerUnits);
+  const powerUtilization = Math.min(1, finalResources.powerUnits / finalResources.maxPowerUnits);
   const fuelBonus = finalFuel;
   const resourceEfficiency = Math.min(100, Math.max(20, Math.round(
     (fuelBonus * 0.5) + (massUtilization * 25) + (powerUtilization * 25)
@@ -63,18 +71,7 @@ export function calculateScoreBreakdown(
 
   const finalScore = Math.min(100, Math.max(0, Math.round(rawScore)));
 
-  let classification: ScoreClassification;
-  if (finalScore >= 90) {
-    classification = 'EXCEPTIONAL MISSION';
-  } else if (finalScore >= 75) {
-    classification = 'MISSION SUCCESS';
-  } else if (finalScore >= 60) {
-    classification = 'PARTIAL SUCCESS';
-  } else if (finalScore >= 40) {
-    classification = 'HIGH RISK';
-  } else {
-    classification = 'MISSION FAILURE';
-  }
+  const classification = classifyScore(finalScore);
 
   return {
     scientificReturn,
@@ -137,10 +134,28 @@ export function generateWhatIfScenarios(currentConfig: MissionConfiguration): Wh
 export function buildMissionResult(
   config: MissionConfiguration,
   resources: ResourceState,
-  decisions: ResolvedDecision[]
+  decisions: ResolvedDecision[],
+  flightOutcome?: FlightOutcome
 ): MissionResult {
   const dest = DESTINATIONS.find(d => d.id === config.destinationId) ?? DESTINATIONS[1];
   const scoreBreakdown = calculateScoreBreakdown(resources, decisions);
+  if (flightOutcome) {
+    scoreBreakdown.dataReturn = Math.round(flightOutcome.packetsReturned / Math.max(1, flightOutcome.packetsAvailable) * 100);
+    scoreBreakdown.finalScore = Math.round(
+      scoreBreakdown.scientificReturn * .30 + scoreBreakdown.missionReliability * .25 +
+      scoreBreakdown.resourceEfficiency * .20 + scoreBreakdown.budgetPerformance * .15 +
+      scoreBreakdown.dataReturn * .10
+    );
+    scoreBreakdown.classification = classifyScore(scoreBreakdown.finalScore);
+  }
+  if (flightOutcome?.missionStatus === 'failed') {
+    scoreBreakdown.finalScore = Math.min(scoreBreakdown.finalScore, 39);
+    scoreBreakdown.classification = 'MISSION FAILURE';
+  } else if (flightOutcome?.missionStatus === 'partial') {
+    scoreBreakdown.finalScore = Math.min(scoreBreakdown.finalScore, 74);
+    scoreBreakdown.classification = 'PARTIAL SUCCESS';
+  }
+  const finalResources = applyDecisionHistory(resources, decisions);
 
   // Analyze decisions for contextual narrative insights
   let missionInsight = '';
@@ -171,11 +186,12 @@ export function buildMissionResult(
     missionId: 'AURORA-2045-A',
     destinationName: dest.name,
     scoreBreakdown,
-    finalResources: resources,
+    finalResources,
     decisions,
     missionInsight,
     keyDecision,
     installedInstruments: config.selectedInstrumentIds,
-    whatIfScenarios
+    whatIfScenarios,
+    flightOutcome
   };
 }

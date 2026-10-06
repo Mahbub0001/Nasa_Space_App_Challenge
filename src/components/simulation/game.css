@@ -1,0 +1,45 @@
+.guide-portrait{position:relative;width:92px;height:92px;flex:none;overflow:hidden;border:1px solid rgba(168,197,214,.22);border-radius:18px;background:#102130;box-shadow:0 10px 30px rgba(0,0,0,.22)}
+.guide-portrait--compact{width:60px;height:60px}
+.guide-portrait svg{display:block;width:100%;height:100%}
+.guide-portrait__signal{position:absolute;right:8px;bottom:8px;width:8px;height:8px;border:2px solid #102130;border-radius:50%;box-sizing:content-box;animation:signal-pulse 2.2s ease-in-out infinite}
+.guide-breathe{transform-origin:90px 120px;animation:guide-breathe 3s ease-in-out infinite}
+.guide-eyes{transform-origin:90px 82px;animation:guide-blink 4.8s infinite}
+.guide-mouth-speaking{animation:guide-talk .23s ease-in-out infinite alternate}
+@keyframes guide-breathe{50%{transform:translateY(2px)}}
+@keyframes guide-blink{0%,45%,48%,100%{transform:scaleY(1)}46%,47%{transform:scaleY(.08)}}
+@keyframes guide-talk{to{transform:translateY(2px) scaleY(1.25)}}
+@keyframes signal-pulse{50%{opacity:.45;box-shadow:0 0 0 5px rgba(145,198,225,.1)}}
+.mission-journey{position:relative;min-height:535px;overflow:hidden;border:1px solid rgba(165,195,215,.18);border-radius:18px;background:radial-gradient(circle at 82% 31%,rgba(118,84,79,.15),transparent 28%),radial-gradient(circle at 12% 72%,rgba(64,139,174,.16),transparent 27%),#08131f;color:#e8f1f5}
+.mission-journey__sky{position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(150,190,212,.025) 1px,transparent 1px),linear-gradient(rgba(150,190,212,.025) 1px,transparent 1px);background-size:42px 42px;pointer-events:none}
+.mission-journey>svg{position:relative;display:block;width:100%;height:390px}
+.mission-journey__star{animation:journey-twinkle 4s ease-in-out infinite}
+.mission-journey__probe{transition:transform .13s linear;filter:drop-shadow(0 0 9px rgba(151,210,237,.55))}
+.mission-journey__probe--flying{animation:probe-hover 1.3s ease-in-out infinite alternate}
+.mission-journey__thruster{animation:thruster-pulse .24s ease-in-out infinite alternate}
+.mission-journey__top,.mission-journey__bottom{position:absolute;left:22px;right:22px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#a9c0d0;pointer-events:none}
+.mission-journey__top{top:19px}.mission-journey__top span{display:flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid rgba(165,195,215,.17);border-radius:7px;background:rgba(9,23,34,.68)}
+.mission-journey__bottom{top:350px;padding:0 10%;font-size:12px;font-weight:600;color:#d0dee7}
+.mission-journey__waypoints{display:flex;gap:5px;margin:0 17px 10px;padding:5px;border:1px solid rgba(165,195,215,.14);border-radius:10px;background:rgba(15,33,46,.86);overflow-x:auto}
+.mission-journey__waypoints button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-width:100px;padding:8px 5px;border-radius:7px;color:#92aab9;font-size:11px;white-space:nowrap;transition:background .2s,color .2s}
+.mission-journey__waypoints button:hover,.mission-journey__waypoints button.is-selected{background:rgba(164,204,226,.12);color:#e7f3f7}
+.mission-journey__waypoints button span{display:grid;place-items:center;width:17px;height:17px;border:1px solid rgba(159,195,211,.3);border-radius:50%;font-family:'IBM Plex Mono',monospace;font-size:10px}
+.mission-journey__detail{display:flex;align-items:center;gap:10px;margin:0 22px 18px;color:#aac4d2;font-size:11px}.mission-journey__detail strong{display:block;color:#edf5f7;font-size:12px}.mission-journey__detail p{margin-top:2px}.mission-journey__detail>span{margin-left:auto;font-family:'IBM Plex Mono',monospace;color:#d0e5ef}
+.mission-journey__decisions{position:absolute;top:59px;left:22px;padding:5px 9px;border-radius:6px;background:rgba(31,63,76,.7);color:#c9e4ed;font-size:10px}
+.mission-journey--compact{min-height:245px;border:0;border-radius:0}.mission-journey--compact>svg{height:245px}.mission-journey--compact .mission-journey__bottom{top:auto;bottom:15px}.mission-journey--compact .mission-journey__top{top:12px;left:14px;right:14px}
+@keyframes journey-twinkle{50%{opacity:.22}}@keyframes probe-hover{to{filter:drop-shadow(0 0 16px rgba(151,210,237,.9))}}@keyframes thruster-pulse{to{opacity:.2;transform:scaleX(.55)}}
+@media(max-width:640px){.mission-journey{min-height:440px}.mission-journey>svg{height:295px}.mission-journey__bottom{top:258px}.mission-journey__waypoints{margin:0 10px 9px}.mission-journey__detail{margin:0 14px 14px}.mission-journey__detail p{font-size:10px}.mission-journey--compact{min-height:210px}.mission-journey--compact>svg{height:210px}}
+@media(prefers-reduced-motion:reduce){.guide-portrait *, .mission-journey *{animation:none!important;transition:none!important}}
+.launch-scene{position:relative;height:270px;overflow:hidden;border:1px solid rgba(165,195,215,.17);border-radius:16px;background:radial-gradient(ellipse at 50% 100%,rgba(94,150,180,.22),transparent 63%),#081421}
+.launch-scene__stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 12%,#dceaf3 98%,transparent),radial-gradient(1px 1px at 29% 55%,#dceaf3 98%,transparent),radial-gradient(2px 2px at 72% 28%,#dceaf3 98%,transparent),radial-gradient(1px 1px at 83% 70%,#dceaf3 98%,transparent),radial-gradient(1px 1px at 52% 15%,#dceaf3 98%,transparent);animation:journey-twinkle 5s ease-in-out infinite}
+.launch-scene__planet{position:absolute;width:160%;height:170px;left:-30%;bottom:-116px;border-radius:50%;background:radial-gradient(ellipse at 50% 0%,#5CA1BF 0%,#1C4F73 46%,#102A43 75%);box-shadow:0 -8px 45px rgba(104,185,212,.28)}
+.launch-scene__ground{position:absolute;left:45%;right:45%;bottom:22px;height:2px;background:#A9C9D8;opacity:.8}
+.launch-scene__rocket{position:absolute;left:calc(50% - 55px);bottom:15px;width:110px;height:200px;filter:drop-shadow(0 4px 15px rgba(0,0,0,.5));transition:transform 1s ease-out}
+.launch-scene__rocket svg{width:100%;height:100%;overflow:visible}
+.launch-scene--ignited .launch-scene__rocket{animation:rocket-ascent 3s ease-in forwards}
+.launch-scene__flame,.launch-scene__flame-inner{opacity:0;transform-origin:80px 174px}
+.launch-scene--ignited .launch-scene__flame,.launch-scene--ignited .launch-scene__flame-inner{opacity:1;animation:rocket-flame .18s ease-in-out infinite alternate}
+.launch-scene__readout{position:absolute;left:18px;bottom:15px;font:500 10px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#B9CED9}
+@keyframes rocket-ascent{0%{transform:translateY(0) scale(1)}70%{transform:translateY(-45px) scale(.85)}100%{transform:translateY(-115px) scale(.65)}}
+@keyframes rocket-flame{to{transform:scaleY(.62);opacity:.7}}
+@media(prefers-reduced-motion:reduce){.launch-scene *{animation:none!important;transition:none!important}}
+

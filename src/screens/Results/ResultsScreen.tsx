@@ -4,6 +4,8 @@ import { AerospaceCard } from '../../components/common/AerospaceCard';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { sound } from '../../utils/sound';
+import { MissionPatchCertificate } from '../../components/results/MissionPatchCertificate';
+import { DESTINATIONS } from '../../data/destinations';
 import { 
   RotateCcw, 
   Split, 
@@ -17,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export const ResultsScreen: React.FC = () => {
-  const { missionResult, setPhase, resetMission } = useMission();
+  const { missionResult, config, setPhase, retryFlight } = useMission();
   const [revealIndex, setRevealIndex] = useState(0);
 
   useEffect(() => {
@@ -80,7 +82,7 @@ export const ResultsScreen: React.FC = () => {
             variant="secondary"
             size="md"
             icon={<RotateCcw className="w-3.5 h-3.5" />}
-            onClick={resetMission}
+            onClick={retryFlight}
           >
             Replay mission
           </Button>
@@ -95,6 +97,18 @@ export const ResultsScreen: React.FC = () => {
           </Button>
         </div>
       </div>
+
+      {missionResult.flightOutcome && (
+        <div className={`rounded-xl border p-5 sm:p-6 ${missionResult.flightOutcome.missionStatus === 'failed' ? 'border-rose-500/45 bg-rose-950/25' : 'border-emerald-500/35 bg-emerald-950/20'}`}>
+          <div className="text-[10px] tracking-[.18em] font-mono text-slate-400 mb-2">FLIGHT DIRECTOR OUTCOME</div>
+          <div className="text-xl sm:text-2xl font-semibold text-white">
+            {missionResult.flightOutcome.missionStatus === 'full' ? 'Mission accomplished · science brought home' : missionResult.flightOutcome.missionStatus === 'partial' ? 'Partial success · more data was left behind' : 'Mission objective missed · revise and fly again'}
+          </div>
+          <div className="mt-2 text-sm text-slate-300">
+            Orbit {missionResult.flightOutcome.orbitCaptured ? 'captured' : 'not captured'} · {missionResult.flightOutcome.packetsReturned}/{missionResult.flightOutcome.packetsAvailable} data packets returned · trajectory error {missionResult.flightOutcome.trajectoryError} m/s
+          </div>
+        </div>
+      )}
 
       {/* Main Hero Score Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
@@ -159,7 +173,7 @@ export const ResultsScreen: React.FC = () => {
           <AerospaceCard
             code="SCORING-MATRIX"
             title="TRANSPARENT SCORING MATRIX"
-            subtitle="NASA SPACE APPS EVALUATION CRITERIA WEIGHTINGS"
+            subtitle="PROJECT AURORA MISSION-SCORE WEIGHTINGS"
           >
             <div className="space-y-3 font-sans">
               
@@ -289,6 +303,17 @@ export const ResultsScreen: React.FC = () => {
 
       </div>
 
+      {/* Official NASA Mission Patch & Certificate of Accomplishment */}
+      <MissionPatchCertificate
+        destinationName={DESTINATIONS.find((d) => d.id === config.destinationId)?.name || 'Mars'}
+        missionScore={scoreBreakdown.finalScore}
+        sciencePoints={missionResult.finalResources.scienceScore}
+        classification={scoreBreakdown.classification}
+        launchVehicle={config.launchVehicleId.replace('_', ' ').toUpperCase()}
+        propulsion={config.propulsionId.replace('_', ' ').toUpperCase()}
+        missionStatus={missionResult.flightOutcome?.missionStatus}
+      />
+
       {/* Decision History / Mission Log Timeline */}
       <AerospaceCard
         code="ACT-LOG"
@@ -390,7 +415,7 @@ export const ResultsScreen: React.FC = () => {
             variant="secondary"
             size="md"
             icon={<RotateCcw className="w-3.5 h-3.5" />}
-            onClick={resetMission}
+            onClick={retryFlight}
           >
             REPLAY MISSION
           </Button>

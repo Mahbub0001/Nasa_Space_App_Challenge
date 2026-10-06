@@ -3,6 +3,7 @@ import { ArrowRight, Box, ChartNoAxesCombined, Orbit, Play } from 'lucide-react'
 import { useMission } from '../../hooks/useMission';
 import { Button } from '../../components/common/Button';
 import { sound } from '../../utils/sound';
+import { MissionJourney } from '../../components/simulation/MissionJourney';
 
 export const LandingScreen: React.FC = () => {
   const { setPhase, applyDemoPreset } = useMission();
@@ -14,7 +15,7 @@ export const LandingScreen: React.FC = () => {
 
   const quickDemo = () => {
     applyDemoPreset();
-    setPhase('mission_control');
+    setPhase('simulation');
   };
 
   return (
@@ -28,14 +29,14 @@ export const LandingScreen: React.FC = () => {
               Space Apps Challenge 2026 <span className="text-slate-600">/</span> Mission design game
             </div>
             <h1 className="max-w-[700px] text-[clamp(3.4rem,7vw,6.3rem)] leading-[0.98] font-semibold tracking-[-0.065em] text-[#EEF3F5]">
-              Make the mission <span className="text-[#94B6CB]">work.</span>
+              Build the craft. <span className="text-[#94B6CB]">Fly the mission.</span>
             </h1>
             <p className="mt-8 max-w-[570px] text-lg leading-relaxed text-slate-400">
-              Design a spacecraft, balance its limits, and see how your engineering decisions shape the journey to Mars.
+              Take command of Aurora. Design its systems, steer through deep-space emergencies, and bring a discovery home from Mars.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Button size="lg" onClick={start} icon={<ArrowRight className="w-4 h-4" />}>Start designing</Button>
-              <Button size="lg" variant="outline" onClick={quickDemo} icon={<Play className="w-4 h-4" />}>Explore demo</Button>
+              <Button size="lg" onClick={start} icon={<ArrowRight className="w-4 h-4" />}>Design your mission</Button>
+              <Button size="lg" variant="outline" onClick={quickDemo} icon={<Play className="w-4 h-4" />}>Play demo mission</Button>
             </div>
             <p className="mt-5 text-xs text-slate-500">An interactive educational prototype. No aerospace experience required.</p>
           </div>
@@ -50,18 +51,11 @@ export const LandingScreen: React.FC = () => {
                 </div>
                 <span className="font-mono text-[10px] text-slate-400 border border-space-border rounded-md px-2 py-1">CONCEPT 01</span>
               </div>
-              <div className="relative h-[245px] flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_center,rgba(83,133,164,0.16),transparent_58%)]">
-                <div className="absolute w-[300px] h-[300px] border border-[#729AB4]/20 rounded-full rotate-[-22deg] scale-y-[0.44]" />
-                <div className="absolute w-[390px] h-[390px] border border-[#729AB4]/10 rounded-full rotate-[-22deg] scale-y-[0.44]" />
-                <div className="w-[125px] h-[125px] rounded-full bg-[radial-gradient(circle_at_34%_30%,#B97859,#793F36_60%,#2C2935)] shadow-[inset_-20px_-20px_35px_rgba(0,0,0,0.35),0_0_65px_rgba(154,90,70,0.08)]" />
-                <div className="absolute top-12 right-16 w-2 h-2 rounded-full bg-[#D8E3E8] shadow-[0_0_15px_#D8E3E8]" />
-                <span className="absolute bottom-5 left-6 text-[11px] font-mono text-slate-500">EARTH → MARS</span>
-                <span className="absolute bottom-5 right-6 text-[11px] font-mono text-slate-500">ORBITAL MISSION</span>
-              </div>
+              <MissionJourney destinationId="mars" progressPct={38} isPlaying compact />
               <div className="grid grid-cols-3 border-t border-space-border divide-x divide-space-border">
                 <div className="p-4"><Box className="w-4 h-4 text-[#9AB9CA] mb-2" /><div className="text-sm font-medium text-slate-200">Configure</div><div className="text-[11px] text-slate-500 mt-1">Spacecraft systems</div></div>
                 <div className="p-4"><ChartNoAxesCombined className="w-4 h-4 text-[#9AB9CA] mb-2" /><div className="text-sm font-medium text-slate-200">Balance</div><div className="text-[11px] text-slate-500 mt-1">Mass, power, budget</div></div>
-                <div className="p-4"><Orbit className="w-4 h-4 text-[#9AB9CA] mb-2" /><div className="text-sm font-medium text-slate-200">Simulate</div><div className="text-[11px] text-slate-500 mt-1">Decisions & outcomes</div></div>
+                <div className="p-4"><Orbit className="w-4 h-4 text-[#9AB9CA] mb-2" /><div className="text-sm font-medium text-slate-200">Fly</div><div className="text-[11px] text-slate-500 mt-1">3 playable encounters</div></div>
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMission } from '../../hooks/useMission';
 import { MissionConfigSelector } from '../../components/mission/MissionConfigSelector';
 import { SpacecraftVisualizer } from '../../components/spacecraft/SpacecraftVisualizer';
@@ -6,13 +6,24 @@ import { TelemetryPanel } from '../../components/telemetry/TelemetryPanel';
 import { AerospaceCard } from '../../components/common/AerospaceCard';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
+import { FlightCommsHUD } from '../../components/narrative/FlightCommsHUD';
+import { CONFIG_REACTIONS } from '../../data/characters';
 import { ArrowRight, Sparkles, Layers } from 'lucide-react';
 
 export const MissionControlScreen: React.FC = () => {
   const { config, audit, setPhase, applyDemoPreset } = useMission();
+  const [reactionKey, setReactionKey] = useState<string>('destination_mars');
+  const [showHUD, setShowHUD] = useState<boolean>(true);
+
+  const activeReaction = CONFIG_REACTIONS[reactionKey] || CONFIG_REACTIONS.destination_mars;
+
+  const handleSubsystemSelect = (key: string) => {
+    setReactionKey(key);
+    setShowHUD(true);
+  };
 
   return (
-    <div className="max-w-[1720px] mx-auto w-full p-5 sm:p-8 space-y-6 font-sans">
+    <div className="max-w-[1720px] mx-auto w-full p-5 sm:p-8 space-y-5 font-sans">
       
       {/* Top Banner / Breadcrumb */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/[0.08] gap-2">
@@ -26,7 +37,7 @@ export const MissionControlScreen: React.FC = () => {
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white font-sans">
-            Spacecraft design
+            Spacecraft design & systems integration
           </h1>
         </div>
 
@@ -35,7 +46,10 @@ export const MissionControlScreen: React.FC = () => {
             variant="outline"
             size="sm"
             icon={<Sparkles className="w-3.5 h-3.5 text-sky-400" />}
-            onClick={applyDemoPreset}
+            onClick={() => {
+              applyDemoPreset();
+              handleSubsystemSelect('launcher_heavy');
+            }}
           >
             Load demo preset
           </Button>
@@ -51,12 +65,23 @@ export const MissionControlScreen: React.FC = () => {
         </div>
       </div>
 
+      {/* Live Engineering Advisory Comms HUD */}
+      {showHUD && (
+        <FlightCommsHUD
+          characterId={activeReaction.characterId}
+          message={activeReaction.text}
+          nasaFact={activeReaction.nasaFact}
+          tone={activeReaction.tone}
+          onDismiss={() => setShowHUD(false)}
+        />
+      )}
+
       {/* Three-Zone Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         
         {/* LEFT ZONE: Mission Configuration (4 cols) */}
         <div className="lg:col-span-4 h-full max-h-[740px] overflow-y-auto pr-1">
-          <MissionConfigSelector />
+          <MissionConfigSelector onSubsystemSelect={handleSubsystemSelect} />
         </div>
 
         {/* CENTER ZONE: Interactive Spacecraft Visualizer (5 cols) */}

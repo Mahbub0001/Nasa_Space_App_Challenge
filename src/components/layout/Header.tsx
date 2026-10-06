@@ -15,7 +15,7 @@ import { ScientificHonestyModal } from '../common/ScientificHonestyModal';
 import { MissionPhase } from '../../types/mission';
 
 export const Header: React.FC = () => {
-  const { phase, setPhase, resetMission, applyDemoPreset } = useMission();
+  const { phase, setPhase, resetMission, applyDemoPreset, missionResult } = useMission();
   const [isMuted, setIsMuted] = useState(sound.getMuted());
   const [showHonesty, setShowHonesty] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(false);
@@ -47,6 +47,8 @@ export const Header: React.FC = () => {
 
   const canNavigateTo = (targetPhase: MissionPhase): boolean => {
     if (phase === 'landing') return false;
+    if (targetPhase === 'simulation' && missionResult) return false;
+    if ((targetPhase === 'results' || targetPhase === 'what_if') && !missionResult) return false;
     // Don't allow jumping into simulation or results if not launched yet
     if ((targetPhase === 'simulation' || targetPhase === 'results' || targetPhase === 'what_if') && 
         (phase === 'briefing' || phase === 'mission_control' || phase === 'payload' || phase === 'readiness')) {
@@ -58,7 +60,7 @@ export const Header: React.FC = () => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full bg-space-950/95 backdrop-blur-md border-b border-space-border">
-        <div className="max-w-[1720px] mx-auto px-5 lg:px-8 h-[68px] flex items-center justify-between gap-5">
+        <div className="max-w-[1720px] mx-auto px-3 sm:px-5 lg:px-8 h-[68px] flex items-center justify-between gap-2 sm:gap-5">
           
           {/* Logo & Mission Identity */}
           <div className="flex items-center gap-3 shrink-0">
@@ -78,7 +80,7 @@ export const Header: React.FC = () => {
                     Aurora 2045
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-500 font-sans">Mission design workspace</div>
+                <div className="hidden sm:block text-[11px] text-slate-500 font-sans">Mission design workspace</div>
               </div>
             </button>
           </div>
@@ -112,7 +114,7 @@ export const Header: React.FC = () => {
           )}
 
           {/* Right Action Tools & Mission Clock */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <div className="hidden 2xl:flex text-right pr-3 border-r border-space-border font-mono">
               <span className="text-[11px] text-slate-400">{timeString}</span>
             </div>

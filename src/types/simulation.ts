@@ -1,4 +1,5 @@
 import { InstrumentId, MissionConfiguration } from './mission';
+import type { FlightOutcome } from '../simulation/flightGame';
 
 export interface ResourceState {
   massKg: number;
@@ -147,4 +148,5 @@ export interface MissionResult {
   keyDecision: string;
   installedInstruments: InstrumentId[];
   whatIfScenarios: WhatIfScenario[];
+  flightOutcome?: FlightOutcome;
 }

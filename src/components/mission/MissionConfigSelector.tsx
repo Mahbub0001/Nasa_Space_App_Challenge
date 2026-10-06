@@ -22,7 +22,11 @@ import {
   CommunicationId 
 } from '../../types/mission';
 
-export const MissionConfigSelector: React.FC = () => {
+interface MissionConfigSelectorProps {
+  onSubsystemSelect?: (reactionKey: string) => void;
+}
+
+export const MissionConfigSelector: React.FC<MissionConfigSelectorProps> = ({ onSubsystemSelect }) => {
   const { 
     config, 
     setDestination, 
@@ -47,7 +51,10 @@ export const MissionConfigSelector: React.FC = () => {
             return (
               <div
                 key={dest.id}
-                onClick={() => setDestination(dest.id as DestinationId)}
+                onClick={() => {
+                  setDestination(dest.id as DestinationId);
+                  onSubsystemSelect?.(`destination_${dest.id}`);
+                }}
                 className={`p-2.5 rounded-md border transition-all cursor-pointer select-none ${
                   isSelected
                     ? 'bg-sky-950/40 border-sky-400/80 ring-1 ring-sky-400/30 shadow-sm'
@@ -91,7 +98,10 @@ export const MissionConfigSelector: React.FC = () => {
             return (
               <div
                 key={lv.id}
-                onClick={() => setLaunchVehicle(lv.id as LaunchVehicleId)}
+                onClick={() => {
+                  setLaunchVehicle(lv.id as LaunchVehicleId);
+                  onSubsystemSelect?.(`launcher_${lv.id}`);
+                }}
                 className={`p-2.5 rounded-md border transition-all cursor-pointer select-none ${
                   isSelected
                     ? 'bg-sky-950/40 border-sky-400/80 ring-1 ring-sky-400/30 shadow-sm'
@@ -128,7 +138,10 @@ export const MissionConfigSelector: React.FC = () => {
             return (
               <div
                 key={prop.id}
-                onClick={() => setPropulsion(prop.id as PropulsionId)}
+                onClick={() => {
+                  setPropulsion(prop.id as PropulsionId);
+                  onSubsystemSelect?.(`propulsion_${prop.id}`);
+                }}
                 className={`p-2.5 rounded-md border transition-all cursor-pointer select-none ${
                   isSelected
                     ? 'bg-sky-950/40 border-sky-400/80 ring-1 ring-sky-400/30 shadow-sm'
@@ -165,7 +178,10 @@ export const MissionConfigSelector: React.FC = () => {
             return (
               <div
                 key={pwr.id}
-                onClick={() => setPowerSystem(pwr.id as PowerSystemId)}
+                onClick={() => {
+                  setPowerSystem(pwr.id as PowerSystemId);
+                  onSubsystemSelect?.(`power_${pwr.id}`);
+                }}
                 className={`p-2.5 rounded-md border transition-all cursor-pointer select-none ${
                   isSelected
                     ? 'bg-sky-950/40 border-sky-400/80 ring-1 ring-sky-400/30 shadow-sm'
@@ -202,7 +218,10 @@ export const MissionConfigSelector: React.FC = () => {
             return (
               <div
                 key={com.id}
-                onClick={() => setCommunication(com.id as CommunicationId)}
+                onClick={() => {
+                  setCommunication(com.id as CommunicationId);
+                  onSubsystemSelect?.(`comms_${com.id}`);
+                }}
                 className={`p-2.5 rounded-md border transition-all cursor-pointer select-none ${
                   isSelected
                     ? 'bg-sky-950/40 border-sky-400/80 ring-1 ring-sky-400/30 shadow-sm'

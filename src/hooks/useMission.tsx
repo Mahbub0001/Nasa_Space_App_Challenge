@@ -14,6 +14,7 @@ import { DEFAULT_MISSION_CONFIG } from '../data/missions';
 import { calculateAllResources } from '../simulation/engine';
 import { checkConstraints } from '../simulation/constraints';
 import { buildMissionResult } from '../simulation/scoring';
+import type { FlightOutcome } from '../simulation/flightGame';
 import { sound } from '../utils/sound';
 
 interface MissionNotification {
@@ -44,8 +45,9 @@ interface MissionContextValue {
   addInstrument: (id: InstrumentId) => void;
   removeInstrument: (id: InstrumentId) => void;
   recordDecision: (decision: ResolvedDecision) => void;
-  finalizeMission: () => void;
+  finalizeMission: (outcome?: FlightOutcome) => void;
   resetMission: () => void;
+  retryFlight: () => void;
   dismissNotification: () => void;
   showNotification: (type: MissionNotification['type'], title: string, message: string) => void;
   applyDemoPreset: () => void;
@@ -92,6 +94,10 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const setPhase = useCallback((newPhase: MissionPhase) => {
     sound.playClick();
+    if (newPhase === 'launch') {
+      setDecisions([]);
+      setMissionResult(null);
+    }
     setPhaseState(newPhase);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -155,8 +161,8 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setDecisions(prev => [...prev, decision]);
   }, []);
 
-  const finalizeMission = useCallback(() => {
-    const result = buildMissionResult(config, resources, decisions);
+  const finalizeMission = useCallback((outcome?: FlightOutcome) => {
+    const result = buildMissionResult(config, resources, decisions, outcome);
     setMissionResult(result);
     setPhaseState('results');
   }, [config, resources, decisions]);
@@ -170,6 +176,15 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setPhaseState('landing');
   }, []);
 
+  const retryFlight = useCallback(() => {
+    sound.playClick();
+    setDecisions([]);
+    setMissionResult(null);
+    setNotification(null);
+    setPhaseState('simulation');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   const applyDemoPreset = useCallback(() => {
     // Exact demo path preset matching PRD Section 53
     setConfig({
@@ -180,6 +195,8 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
       communicationId: 'deep_space',
       selectedInstrumentIds: ['imaging_system', 'spectrometer', 'radar', 'radiation_detector']
     });
+    setDecisions([]);
+    setMissionResult(null);
     sound.playSuccess();
   }, []);
 
@@ -205,6 +222,7 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
         recordDecision,
         finalizeMission,
         resetMission,
+        retryFlight,
         dismissNotification,
         showNotification,
         applyDemoPreset

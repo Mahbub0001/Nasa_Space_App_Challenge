@@ -3,6 +3,7 @@ import { useMission } from '../../hooks/useMission';
 import { Button } from '../../components/common/Button';
 import { sound } from '../../utils/sound';
 import { Rocket, FastForward, Flame, CheckCircle } from 'lucide-react';
+import { LaunchScene } from '../../components/simulation/LaunchScene';
 
 export const LaunchScreen: React.FC = () => {
   const { setPhase, config } = useMission();
@@ -82,6 +83,7 @@ export const LaunchScreen: React.FC = () => {
 
       {/* Central Launch Console */}
       <div className={`max-w-3xl w-full text-center z-10 space-y-5 ${isIgnited ? 'animate-pulse-subtle' : ''}`}>
+        <LaunchScene ignited={isIgnited} altitudeKm={telemetryAltitudeKm} />
         
         {/* Top Status Header */}
         <div className="flex items-center justify-between px-4 py-2.5 bg-white/[0.02] border border-white/[0.08] rounded-md text-xs">

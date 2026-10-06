@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMission } from '../../hooks/useMission';
 import { TrajectoryCanvas } from '../../components/simulation/TrajectoryCanvas';
 import { AerospaceCard } from '../../components/common/AerospaceCard';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
+import { FlightCommsHUD } from '../../components/narrative/FlightCommsHUD';
+import { BRIEFING_DIALOGUE, CHARACTERS } from '../../data/characters';
+import { sound } from '../../utils/sound';
 import { 
   ArrowRight, 
   Clock, 
@@ -12,12 +15,20 @@ import {
   Zap, 
   Radio, 
   Atom, 
-  AlertCircle 
+  AlertCircle,
+  Users
 } from 'lucide-react';
 import { BASELINE_CONSTRAINTS } from '../../data/missions';
 
 export const BriefingScreen: React.FC = () => {
   const { setPhase, config } = useMission();
+  const [dialogueIndex, setDialogueIndex] = useState(0);
+
+  const currentDialogue = BRIEFING_DIALOGUE[dialogueIndex];
+
+  const handleNextDialogue = () => {
+    setDialogueIndex((prev) => (prev + 1) % BRIEFING_DIALOGUE.length);
+  };
 
   return (
     <div className="max-w-[1520px] mx-auto w-full p-5 sm:p-8 space-y-6 font-sans">
@@ -30,11 +41,11 @@ export const BriefingScreen: React.FC = () => {
               01 / Briefing
             </span>
             <span className="text-xs text-slate-400 font-sans">
-              Project Aurora
+              Project Aurora // NASA Space Apps Challenge
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-100">
-            Mission briefing
+            Mission briefing & Advisory Council
           </h1>
         </div>
 
@@ -51,6 +62,53 @@ export const BriefingScreen: React.FC = () => {
             Design spacecraft
           </Button>
         </div>
+      </div>
+
+      {/* Advisory Council Interactive Comms HUD */}
+      <div className="space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 uppercase tracking-wider font-sans">
+            <Users className="w-4 h-4 text-sky-400" />
+            <span>FLIGHT ADVISORY COUNCIL (CLICK ADVISOR TO HEAR BRIEFING):</span>
+          </div>
+
+          {/* Advisor Selector Pills */}
+          <div className="flex items-center gap-1.5">
+            {BRIEFING_DIALOGUE.map((item, idx) => {
+              const char = CHARACTERS[item.characterId];
+              const isSelected = idx === dialogueIndex;
+              return (
+                <button
+                  key={item.characterId}
+                  onClick={() => {
+                    sound.playClick();
+                    setDialogueIndex(idx);
+                  }}
+                  className={`px-3 py-1 rounded-md text-xs font-mono transition-all flex items-center gap-1.5 border ${
+                    isSelected
+                      ? 'bg-slate-800 text-white border-sky-400 font-semibold shadow-sm'
+                      : 'bg-slate-900/40 text-slate-400 border-white/[0.06] hover:bg-slate-800/60 hover:text-slate-200'
+                  }`}
+                >
+                  <span
+                    className="w-2 h-2 rounded-full inline-block"
+                    style={{ backgroundColor: char.themeColor }}
+                  />
+                  <span>{char.callsign}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Live Active Audio & Comms Box */}
+        <FlightCommsHUD
+          characterId={currentDialogue.characterId}
+          message={currentDialogue.text}
+          nasaFact={currentDialogue.nasaFact}
+          tone={currentDialogue.tone}
+          onNext={handleNextDialogue}
+        />
       </div>
 
       {/* Main Grid: Mission Narrative & Baseline Constraints */}

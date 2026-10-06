@@ -22,7 +22,7 @@ export const ScientificHonestyModal: React.FC<ScientificHonestyModalProps> = ({ 
                 SCIENTIFIC BASIS & PROTOTYPE DISCLOSURE
               </h2>
               <span className="text-[10px] text-slate-400 font-mono">
-                DOC-REF: MF-2026-ARCH-01 // NASA SPACE APPS DEMO
+                DOC-REF: MF-2026-ARCH-01 // PROJECT AURORA
               </span>
             </div>
           </div>
@@ -40,8 +40,8 @@ export const ScientificHonestyModal: React.FC<ScientificHonestyModalProps> = ({ 
             <span className="font-semibold tracking-wide uppercase block text-[11px] mb-1">
               Scientific Honesty Statement
             </span>
-            MISSION FORGE is an interactive conceptual simulation prototype designed for the NASA Space Apps Challenge shortlist demonstration. 
-            The current demo uses fictionalized, balanced game parameters inspired by real aerospace engineering trade-offs (Tsiolkovsky rocket equation, power budgets, specific impulse, downlink link-budgets).
+            MISSION FORGE is an independent educational game prototype for NASA Space Apps Challenge participation.
+            The flight challenges use fictional, game-balanced parameters inspired by aerospace trade-offs. The burn, storm and downlink encounters are decision models, not mission-grade orbital or radio simulations.
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
@@ -51,7 +51,7 @@ export const ScientificHonestyModal: React.FC<ScientificHonestyModalProps> = ({ 
                 <span>DATA PROVENANCE</span>
               </div>
               <p className="text-[11px] text-slate-400 leading-normal">
-                Not claimed as certified NASA mission telemetry. Labeled strictly as <em>Conceptual Simulation Parameters</em>. Designed to be backend-ready for direct integration with the NASA Planetary Data System (PDS) and Open Science Data repositories in subsequent hackathon development.
+                Numbers and event timing in this prototype are authored game parameters, not live NASA telemetry. The 3D route and planet view are illustrative and not to scale.
               </p>
             </div>
 
@@ -61,7 +61,7 @@ export const ScientificHonestyModal: React.FC<ScientificHonestyModalProps> = ({ 
                 <span>ENGINEERING PRINCIPLES</span>
               </div>
               <p className="text-[11px] text-slate-400 leading-normal">
-                Models real-world aerospace systems engineering: payload mass allocation, solar flux degradation ($1/r^2$), radioisotope thermal decay, high-frequency antenna gain, and deterministic delta-V margins.
+                Preflight calculations approximate mass, power, budget and propulsion trade-offs. Flight challenges connect those configuration choices to limited fuel, storm power capacity, data-window capacity and arrival risk.
               </p>
             </div>
           </div>
@@ -69,7 +69,7 @@ export const ScientificHonestyModal: React.FC<ScientificHonestyModalProps> = ({ 
           <div className="p-3.5 bg-white/[0.02] border border-white/[0.06] rounded-md">
             <div className="flex items-center gap-2 mb-1.5 text-sky-400 font-semibold text-[11px]">
               <Compass className="w-4 h-4" />
-              <span>POST-SHORTLIST HACKATHON ROADMAP</span>
+              <span>FUTURE SCIENCE INTEGRATION</span>
             </div>
             <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-400">
               <li>Ingest verified Horizons ephemerides and SPICE trajectory kernels.</li>
