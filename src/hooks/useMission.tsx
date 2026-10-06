@@ -45,7 +45,7 @@ interface MissionContextValue {
   addInstrument: (id: InstrumentId) => void;
   removeInstrument: (id: InstrumentId) => void;
   recordDecision: (decision: ResolvedDecision) => void;
-  finalizeMission: (outcome?: FlightOutcome) => void;
+  finalizeMission: (outcome?: FlightOutcome, targetPhase?: MissionPhase) => void;
   resetMission: () => void;
   retryFlight: () => void;
   dismissNotification: () => void;
@@ -60,6 +60,7 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [config, setConfig] = useState<MissionConfiguration>(DEFAULT_MISSION_CONFIG);
   const [decisions, setDecisions] = useState<ResolvedDecision[]>([]);
   const [missionResult, setMissionResult] = useState<MissionResult | null>(null);
+  const [flightOutcome, setFlightOutcome] = useState<FlightOutcome | null>(null);
   const [notification, setNotification] = useState<MissionNotification | null>(null);
 
   // Recalculate deterministic resources whenever configuration changes
@@ -97,10 +98,15 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if (newPhase === 'launch') {
       setDecisions([]);
       setMissionResult(null);
+      setFlightOutcome(null);
+    }
+    if (newPhase === 'results' && !missionResult) {
+      const result = buildMissionResult(config, resources, decisions, flightOutcome ?? undefined);
+      setMissionResult(result);
     }
     setPhaseState(newPhase);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [config, resources, decisions, flightOutcome, missionResult]);
 
   const setDestination = useCallback((destinationId: DestinationId) => {
     sound.playClick();
@@ -161,17 +167,22 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setDecisions(prev => [...prev, decision]);
   }, []);
 
-  const finalizeMission = useCallback((outcome?: FlightOutcome) => {
-    const result = buildMissionResult(config, resources, decisions, outcome);
+  const finalizeMission = useCallback((outcome?: FlightOutcome, targetPhase: MissionPhase = 'results') => {
+    const outcomeToUse = outcome ?? flightOutcome ?? undefined;
+    if (outcome) {
+      setFlightOutcome(outcome);
+    }
+    const result = buildMissionResult(config, resources, decisions, outcomeToUse);
     setMissionResult(result);
-    setPhaseState('results');
-  }, [config, resources, decisions]);
+    setPhaseState(targetPhase);
+  }, [config, resources, decisions, flightOutcome]);
 
   const resetMission = useCallback(() => {
     sound.playClick();
     setConfig(DEFAULT_MISSION_CONFIG);
     setDecisions([]);
     setMissionResult(null);
+    setFlightOutcome(null);
     setNotification(null);
     setPhaseState('landing');
   }, []);
@@ -180,6 +191,7 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
     sound.playClick();
     setDecisions([]);
     setMissionResult(null);
+    setFlightOutcome(null);
     setNotification(null);
     setPhaseState('simulation');
     window.scrollTo({ top: 0, behavior: 'smooth' });

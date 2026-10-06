@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   MapPin, 
   Flame, 
@@ -24,6 +24,7 @@ export const ArrivalScreen: React.FC = () => {
   const { config, setPhase, resources, recordDecision } = useMission();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  const touchdownRecordedRef = useRef(false);
   const [entryAngle, setEntryAngle] = useState(
     config.destinationId === 'mars' ? -12.2 : config.destinationId === 'lunar_orbit' ? -15.0 : -4.0
   );
@@ -89,6 +90,7 @@ export const ArrivalScreen: React.FC = () => {
 
   const handleInitiateDescent = () => {
     sound.playClick();
+    touchdownRecordedRef.current = false;
     setStep(3);
     setDescentActive(true);
     setDescentProgress(0);
@@ -110,19 +112,22 @@ export const ArrivalScreen: React.FC = () => {
           } else {
             sound.playAlert();
           }
-          recordDecision({
-            eventId: 'surface_touchdown',
-            eventCode: 'ARR-02',
-            eventTitle: `Touchdown at ${selectedSite.name}`,
-            choiceId: selectedSite.id,
-            choiceTag: 'B',
-            choiceLabel: `Site: ${selectedSite.name} (Throttle ${throttle}%)`,
-            consequenceSummary: `${result.title} · ${result.detail}`,
-            timestamp: new Date().toISOString(),
-            deltas: { fuel: -result.fuelConsumedPct, risk: result.success ? -8 : 25, science: result.scienceYield, power: 0, data: 15 },
-            beforeState: { fuel: resources.fuelPct, power: 85, risk: resources.riskPct, science: resources.scienceScore },
-            afterState: { fuel: Math.max(0, resources.fuelPct - result.fuelConsumedPct), power: 85, risk: result.success ? 4 : 45, science: resources.scienceScore + result.scienceYield },
-          });
+          if (!touchdownRecordedRef.current) {
+            touchdownRecordedRef.current = true;
+            recordDecision({
+              eventId: 'surface_touchdown',
+              eventCode: 'ARR-02',
+              eventTitle: `Touchdown at ${selectedSite.name}`,
+              choiceId: selectedSite.id,
+              choiceTag: 'B',
+              choiceLabel: `Site: ${selectedSite.name} (Throttle ${throttle}%)`,
+              consequenceSummary: `${result.title} · ${result.detail}`,
+              timestamp: new Date().toISOString(),
+              deltas: { fuel: -result.fuelConsumedPct, risk: result.success ? -8 : 25, science: result.scienceYield, power: 0, data: 15 },
+              beforeState: { fuel: resources.fuelPct, power: 85, risk: resources.riskPct, science: resources.scienceScore },
+              afterState: { fuel: Math.max(0, resources.fuelPct - result.fuelConsumedPct), power: 85, risk: result.success ? 4 : 45, science: resources.scienceScore + result.scienceYield },
+            });
+          }
           return 100;
         }
         return next;

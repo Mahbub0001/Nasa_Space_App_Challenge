@@ -32,7 +32,7 @@ function applyResolution(resources: ResourceState, result: FlightResolution): Re
 }
 
 export const SimulationScreen: React.FC = () => {
-  const { config, resources, decisions, recordDecision, finalizeMission, setPhase } = useMission();
+  const { config, resources, decisions, recordDecision, finalizeMission } = useMission();
   const [progress, setProgress] = useState(12);
   const [playing, setPlaying] = useState(true);
   const [speed, setSpeed] = useState<1 | 2 | 4>(1);
@@ -121,7 +121,7 @@ export const SimulationScreen: React.FC = () => {
         <strong>{outcome.missionStatus === 'full' ? 'Arrival corridor established' : outcome.missionStatus === 'partial' ? 'Arrival corridor reached' : 'Mission objectives missed'}</strong>
         <p>{outcome.orbitCaptured ? `Target approach confirmed. ${outcome.packetsReturned} of ${outcome.packetsAvailable} telemetry packets returned to Earth.` : 'The spacecraft could not enter a stable target orbit. Review the burn and resource decisions.'}</p>
         {outcome.orbitCaptured ? (
-          <button className="flight-challenge__commit" type="button" onClick={() => { sound.playSuccess(); setPhase('arrival'); }}>
+          <button className="flight-challenge__commit" type="button" onClick={() => { sound.playSuccess(); finalizeMission(outcome, 'arrival'); }}>
             <Sparkles size={15} /> INITIATE ORBITAL INSERTION & TOUCHDOWN →
           </button>
         ) : (

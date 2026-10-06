@@ -11,7 +11,7 @@ import { sound } from '../../utils/sound';
 import './discovery.css';
 
 export const DiscoveryScreen: React.FC = () => {
-  const { config, setPhase, resources } = useMission();
+  const { config, resources, finalizeMission } = useMission();
   const [selectedDiscoveryId, setSelectedDiscoveryId] = useState<string | null>(null);
 
   const targetName = config.destinationId === 'mars' ? 'Mars' : config.destinationId === 'lunar_orbit' ? 'the Moon' : 'the Asteroid';
@@ -27,7 +27,7 @@ export const DiscoveryScreen: React.FC = () => {
 
   const handleProceedToDebrief = () => {
     sound.playSuccess();
-    setPhase('results');
+    finalizeMission();
   };
 
   return (

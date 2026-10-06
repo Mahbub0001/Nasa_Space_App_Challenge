@@ -6,6 +6,7 @@ import { Badge } from '../../components/common/Badge';
 import { sound } from '../../utils/sound';
 import { MissionPatchCertificate } from '../../components/results/MissionPatchCertificate';
 import { DESTINATIONS } from '../../data/destinations';
+import { buildMissionResult } from '../../simulation/scoring';
 import { 
   RotateCcw, 
   Split, 
@@ -14,13 +15,13 @@ import {
   Zap, 
   DollarSign, 
   Wifi, 
-  Lightbulb,
-  Compass,
-  Sparkles
+  Lightbulb, 
+  Compass, 
+  Sparkles 
 } from 'lucide-react';
 
 export const ResultsScreen: React.FC = () => {
-  const { missionResult, config, setPhase, retryFlight } = useMission();
+  const { missionResult, config, setPhase, retryFlight, resources, decisions } = useMission();
   const [revealIndex, setRevealIndex] = useState(0);
 
   useEffect(() => {
@@ -38,18 +39,8 @@ export const ResultsScreen: React.FC = () => {
     return () => timers.forEach(clearTimeout);
   }, []);
 
-  if (!missionResult) {
-    return (
-      <div className="p-8 text-center font-mono">
-        <p className="text-telemetry-muted">No completed mission results recorded.</p>
-        <Button variant="primary" className="mt-4" onClick={() => setPhase('mission_control')}>
-          RETURN TO MISSION CONTROL
-        </Button>
-      </div>
-    );
-  }
-
-  const { scoreBreakdown, missionInsight, keyDecision } = missionResult;
+  const activeResult = missionResult || buildMissionResult(config, resources, decisions);
+  const { scoreBreakdown, missionInsight, keyDecision } = activeResult;
 
   const scoreBadgeVariant = {
     'EXCEPTIONAL MISSION': 'nominal' as const,
@@ -108,14 +99,14 @@ export const ResultsScreen: React.FC = () => {
         </div>
       </div>
 
-      {missionResult.flightOutcome && (
-        <div className={`rounded-xl border p-5 sm:p-6 ${missionResult.flightOutcome.missionStatus === 'failed' ? 'border-rose-500/45 bg-rose-950/25' : 'border-emerald-500/35 bg-emerald-950/20'}`}>
+      {activeResult.flightOutcome && (
+        <div className={`rounded-xl border p-5 sm:p-6 ${activeResult.flightOutcome.missionStatus === 'failed' ? 'border-rose-500/45 bg-rose-950/25' : 'border-emerald-500/35 bg-emerald-950/20'}`}>
           <div className="text-[10px] tracking-[.18em] font-mono text-slate-400 mb-2">FLIGHT DIRECTOR OUTCOME</div>
           <div className="text-xl sm:text-2xl font-semibold text-white">
-            {missionResult.flightOutcome.missionStatus === 'full' ? 'Mission accomplished · science brought home' : missionResult.flightOutcome.missionStatus === 'partial' ? 'Partial success · more data was left behind' : 'Mission objective missed · revise and fly again'}
+            {activeResult.flightOutcome.missionStatus === 'full' ? 'Mission accomplished · science brought home' : activeResult.flightOutcome.missionStatus === 'partial' ? 'Partial success · more data was left behind' : 'Mission objective missed · revise and fly again'}
           </div>
           <div className="mt-2 text-sm text-slate-300">
-            Orbit {missionResult.flightOutcome.orbitCaptured ? 'captured' : 'not captured'} · {missionResult.flightOutcome.packetsReturned}/{missionResult.flightOutcome.packetsAvailable} data packets returned · trajectory error {missionResult.flightOutcome.trajectoryError} m/s
+            Orbit {activeResult.flightOutcome.orbitCaptured ? 'captured' : 'not captured'} · {activeResult.flightOutcome.packetsReturned}/{activeResult.flightOutcome.packetsAvailable} data packets returned · trajectory error {activeResult.flightOutcome.trajectoryError} m/s
           </div>
         </div>
       )}
@@ -317,11 +308,11 @@ export const ResultsScreen: React.FC = () => {
       <MissionPatchCertificate
         destinationName={DESTINATIONS.find((d) => d.id === config.destinationId)?.name || 'Mars'}
         missionScore={scoreBreakdown.finalScore}
-        sciencePoints={missionResult.finalResources.scienceScore}
+        sciencePoints={activeResult.finalResources.scienceScore}
         classification={scoreBreakdown.classification}
         launchVehicle={config.launchVehicleId.replace('_', ' ').toUpperCase()}
         propulsion={config.propulsionId.replace('_', ' ').toUpperCase()}
-        missionStatus={missionResult.flightOutcome?.missionStatus}
+        missionStatus={activeResult.flightOutcome?.missionStatus}
       />
 
       {/* Decision History / Mission Log Timeline */}
@@ -330,10 +321,10 @@ export const ResultsScreen: React.FC = () => {
         title="MISSION DECISION LOG // EXECUTIVE TIMELINE"
         subtitle="CHRONOLOGICAL RECORD OF CRITICAL DIRECTIVES & TACTICAL CONSEQUENCES"
       >
-        {missionResult.decisions && missionResult.decisions.length > 0 ? (
+        {activeResult.decisions && activeResult.decisions.length > 0 ? (
           <div className="space-y-4 font-sans">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {missionResult.decisions.map((dec, idx) => (
+              {activeResult.decisions.map((dec, idx) => (
                 <div
                   key={dec.eventId || idx}
                   className="p-4 rounded-lg bg-white/[0.02] border border-white/[0.08] relative overflow-hidden flex flex-col justify-between shadow-sm"
