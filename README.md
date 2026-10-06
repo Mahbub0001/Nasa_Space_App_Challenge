@@ -1,6 +1,7 @@
 # 🚀 MISSION FORGE: PROJECT AURORA
-### NASA Space Apps Challenge 2026 — Space Mission Design & Simulation
+### Team MathaiBlock · NASA Space Apps Challenge 2026
 
+[![Team: MathaiBlock](https://img.shields.io/badge/Team-MathaiBlock-E11D48?style=for-the-badge&logoColor=white)](https://github.com/Mahbub0001/Nasa_Space_App_Challenge)
 [![NASA Space Apps Challenge](https://img.shields.io/badge/NASA%20Space%20Apps-Challenge%202026-0B3D91?style=for-the-badge&logo=nasa&logoColor=white)](https://www.spaceappschallenge.org/)
 [![React 18](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7.2-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -186,14 +187,3 @@ For judges reviewing this submission for **Best Mission Concept**, **Galactic Im
 2. **Inspirational Value**: Designed to inspire students and future astronauts by demystifying deep-space mission planning through rich visual storytelling.
 3. **Zero Asset Dependencies**: All 3D planetary spheres, plasma cones, particle fields, sound effects, and certificates render locally with zero external network dependency.
 4. **Resilient UX**: Automatic score dehydration and persistent telemetry logs ensure uninterrupted playthroughs across mobile, tablet, and desktop viewports.
-
----
-
-<div align="center">
-
-**DESIGN. DECIDE. EXPLORE.**  
-*Humanity’s journey to the stars starts with a single blueprint.*
-
-**Crafted with ❤️ for the NASA Space Apps Challenge 2026**
-
-</div>
